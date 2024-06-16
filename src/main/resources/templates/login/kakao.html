@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카카오 회원 가입</title>
+</head>
+<body>
+<h1>카카오 회원 가입</h1>
+<form th:action="@{/kakaoPost}" method="post">
+    <div>
+        <label for="dataOfBirth">생년월일:</label>
+        <input type="number" id="dataOfBirth" name="dataOfBirth" required>
+    </div>
+    <div>
+        <label for="gender">성별:</label>
+        <select id="gender" name="gender" required>
+            <option value="MALE">남성</option>
+            <option value="FEMALE">여성</option>
+        </select>
+    </div>
+    <div>
+        <label for="department">학과:</label>
+        <input type="text" id="department" name="department" required>
+    </div>
+    <div>
+        <label for="phoneNum">전화번호:</label>
+        <input type="text" id="phoneNum" name="phoneNum" required>
+    </div>
+    <div>
+        <label for="email">이메일:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <button type="kakaoSubmit">카카오 가입</button>
+</form>
+</body>
+</html>

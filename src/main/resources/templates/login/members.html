@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 정보</title>
+</head>
+<body>
+<h1>회원 정보</h1>
+<div th:if="${member != null}">
+    <p>이름: <span th:text="${member.name}"></span></p>
+    <p>생년월일: <span th:text="${member.dataOfBirth}"></span></p>
+    <p>성별: <span th:text="${member.gender}"></span></p>
+    <p>학과: <span th:text="${member.department}"></span></p>
+    <p>학번: <span th:text="${member.id}"></span></p>
+    <p>전화번호: <span th:text="${member.phoneNum}"></span></p>
+    <p>이메일: <span th:text="${member.email}"></span></p>
+</div>
+<div th:unless="${member != null}">
+    <p>회원 정보가 없습니다.</p>
+</div>
+</body>
+</html>
