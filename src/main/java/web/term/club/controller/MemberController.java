@@ -3,7 +3,6 @@ package web.term.club.controller;
 import jakarta.servlet.http.HttpSession;
 
 import web.term.club.domain.Enum.Gender;
-import web.term.club.domain.Enum.Role;
 import web.term.club.domain.Member;
 import web.term.club.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
 
 @Controller
 public class MemberController {
@@ -87,7 +84,28 @@ public class MemberController {
         return "redirect:/members";
     }
 
-    //(4) 사용자 화면
+    //(4) 로그인 화면
+    //로그인
+    @PostMapping("/loginButton")
+    public String loginButton() {
+        System.out.println("haha1");
+        return "login/logins";
+    }
+    @PostMapping("/logins")
+    public String loginMember(@RequestParam String name, @RequestParam int dataOfBirth, @RequestParam Gender gender, @RequestParam String department, @RequestParam String phoneNum, @RequestParam String email, HttpSession session) {
+        System.out.println("haha2");
+
+        Member member = memberService.loginMember(name, dataOfBirth, gender, department, phoneNum, email);
+
+        if (member != null) { // 회원이 존재하는 경우
+            session.setAttribute("id", member.getId());
+            return "redirect:/members";
+        } else { // 회원이 존재하지 않는 경우
+            return "login/logins"; // 로그인 페이지로 다시 이동 (로그인 페이지 뷰 이름을 "login"으로 가정)
+        }
+    }
+
+    //(5) 사용자 화면
     @GetMapping("/members")
     public String showMembers(Model model, HttpSession session) {
         Long memberId = (Long) session.getAttribute("id");
