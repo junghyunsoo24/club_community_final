@@ -1,12 +1,9 @@
 package web.term.club.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubMember;
 import web.term.club.domain.Member;
@@ -47,13 +44,13 @@ public class ClubMemberController {
     }
     //해당 멤버 승인
     @PostMapping("/approve/{memberId}")
-    public ResponseEntity<?> approveClubMember(@RequestParam Long requesterId, @PathVariable Long memberId) {
+    public ResponseEntity<?> approveClubMember(@RequestParam Long requesterId, @RequestParam Long clubId, @PathVariable Long memberId) {
         try {
             Member requestMember = new Member();
             requestMember.setId(requesterId);
             ClubMember targetMember = new ClubMember();
             targetMember.setId(memberId);
-            ClubMember updatedMember = clubMemberService.approveClubMember(requestMember, targetMember);
+            ClubMember updatedMember = clubMemberService.approveClubMember(requestMember, clubId, targetMember);
             return new ResponseEntity<>(updatedMember, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Unauthorized access or error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,26 +58,26 @@ public class ClubMemberController {
     }
     // 해당 멤버 거절
     @PostMapping("/reject/{memberId}")
-    public ResponseEntity<?> rejectClubMember(@RequestParam Long requesterId, @PathVariable Long memberId) {
+    public ResponseEntity<?> rejectClubMember(@RequestParam Long requesterId, @RequestParam Long clubId, @PathVariable Long memberId) {
         try {
             Member requestMember = new Member();
             requestMember.setId(requesterId);
             ClubMember targetMember = new ClubMember();
             targetMember.setId(memberId);
-            ClubMember updatedMember = clubMemberService.rejectClubMember(requestMember, targetMember);
+            ClubMember updatedMember = clubMemberService.rejectClubMember(requestMember,clubId, targetMember);
             return new ResponseEntity<>(updatedMember, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Unauthorized access or error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/ban/{memberId}")
-    public ResponseEntity<?> banClubMember(@RequestParam Long requesterId, @PathVariable Long memberId) {
+    public ResponseEntity<?> banClubMember(@RequestParam Long requesterId, @RequestParam Long clubId, @PathVariable Long memberId) {
         try {
             Member requestMember = new Member();
             requestMember.setId(requesterId);
             ClubMember targetMember = new ClubMember();
             targetMember.setId(memberId);
-            ClubMember updatedMember = clubMemberService.banClubMember(requestMember, targetMember);
+            ClubMember updatedMember = clubMemberService.banClubMember(requestMember, clubId, targetMember);
             return new ResponseEntity<>(updatedMember, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Unauthorized access or error", HttpStatus.INTERNAL_SERVER_ERROR);

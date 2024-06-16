@@ -38,9 +38,14 @@ public class Member {
         this.department = department;
         this.phoneNum = phoneNum;
         this.email = email;
-        this.role = role;
-    }
+        if(role == null){
+            this.role = Role.NORMAL;
+        }
+        else{
+            this.role = role;
+        }
 
+    }
 
     //마스터 권한 부여
     public void makeMaster(){
