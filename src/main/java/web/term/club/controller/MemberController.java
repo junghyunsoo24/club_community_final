@@ -34,7 +34,6 @@ public class MemberController {
     public String joinMember(@RequestParam String name, @RequestParam int dataOfBirth, @RequestParam Gender gender, @RequestParam String department, @RequestParam String phoneNum, @RequestParam String email, HttpSession session) {
         Member member = memberService.joinMember(name, dataOfBirth, gender, department, phoneNum, email);
         session.setAttribute("id", member.getId());
-
         return "redirect:/members";
     }
 
@@ -50,53 +49,36 @@ public class MemberController {
         session.setAttribute("department", department);
         session.setAttribute("phoneNum", phoneNum);
         session.setAttribute("email", email);
-        System.out.println("haha22");
-
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
         url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
         url.append("&redirect_uri=http://localhost:8080/kakao");
         url.append("&response_type=code");
-
-        System.out.println("redirect:" + url);
         return "redirect:" + url;
     }
     @RequestMapping(value = "/kakao")
     public String kakaoLogin(@RequestParam("code") String code, HttpSession session) throws Exception {
-        System.out.println("haha33");
-
         String access_token = memberService.getToken(code);//code로 토큰 받음
-        System.out.println(access_token);
-
         memberService.getUserInfo(access_token, session);
-
         String name = (String) session.getAttribute("name");
         int dataOfBirth = (int) session.getAttribute("dataOfBirth");
         Gender gender = (Gender) session.getAttribute("gender");
         String department = (String) session.getAttribute("department");
         String phoneNum = (String) session.getAttribute("phoneNum");
         String email = (String) session.getAttribute("email");
-
         Member member = memberService.joinMember(name, dataOfBirth, gender, department, phoneNum, email);
         session.setAttribute("id", member.getId());
-        System.out.println((Long) session.getAttribute("id"));
-
         return "redirect:/members";
     }
 
     //(4) 로그인 화면
-    //로그인
     @PostMapping("/loginButton")
     public String loginButton() {
-        System.out.println("haha1");
         return "login/logins";
     }
     @PostMapping("/logins")
     public String loginMember(@RequestParam String name, @RequestParam int dataOfBirth, @RequestParam Gender gender, @RequestParam String department, @RequestParam String phoneNum, @RequestParam String email, HttpSession session) {
-        System.out.println("haha2");
-
         Member member = memberService.loginMember(name, dataOfBirth, gender, department, phoneNum, email);
-
         if (member != null) { // 회원이 존재하는 경우
             session.setAttribute("id", member.getId());
             return "redirect:/members";
