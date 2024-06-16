@@ -42,6 +42,8 @@ spring:
       mode: never
 
 file:
-  root-path: C:/Users/sunni/file-repository/
+  root-path: C:/Users/Test/file-repository/
   root-url: /files
 
+server:
+  port: 8081
