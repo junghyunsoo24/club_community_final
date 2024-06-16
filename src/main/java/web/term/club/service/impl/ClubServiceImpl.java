@@ -29,7 +29,6 @@ public class ClubServiceImpl implements ClubSerivce {
     @Autowired
     private ClubInfoRepository clubInfoRepository;
 
-
     @Override
     public ClubDto addClub(ClubDto clubDto) throws Exception {
         // chairman은 접속 중인 사람이어야 함
@@ -37,7 +36,7 @@ public class ClubServiceImpl implements ClubSerivce {
         Member supervisor = memberRepository.findById(clubDto.getReqProfessorId()).orElseThrow(() -> new IllegalArgumentException("회원 정보 찾을 수 없음. : 교수"));
         clubDto.setClubApprovalStatus(ClubApprovalStatus.WAITING);
         Club club = clubDto.toEntity(chairman, supervisor);
-        ClubInfo clubInfo = new ClubInfo(null, null, null, null, club);
+        ClubInfo clubInfo = new ClubInfo(club, null, null, null);
         club.setClubInfo(clubInfo);
         club.setRefuseInfo(null);
         clubInfoRepository.save(clubInfo);
