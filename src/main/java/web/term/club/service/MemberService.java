@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -54,6 +55,12 @@ public class MemberService {
         } else {
             return null; // 회원이 존재하지 않으면 null 반환
         }
+    }
+
+    public Member findMember(String name) {
+
+        return memberRepository.findFirstByName(name);
+
     }
 
     public void getUserInfo(String access_token,HttpSession session) throws Exception {
@@ -139,4 +146,53 @@ public class MemberService {
 
         return access_Token;
     }
+
+    public String getTokens(String code) throws Exception {
+        String access_Token = "";
+
+        //EndPoint URL = API가 서버에서 자원에 접근할 수 있도록 하는 URL
+        final String requestUrl = "https://kauth.kakao.com/oauth/token";
+
+        //토큰을 요청할 URL 객체 생성
+        URL url = new URL(requestUrl);
+
+        //HTTP 연결 설정
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+
+        //서버로 요청 보내기
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
+        StringBuilder sb = new StringBuilder();
+        sb.append("grant_type=authorization_code");
+        sb.append("&client_id=f2885fad71791b437dbbbc28d1a48796");
+        sb.append("&redirect_uri=http://localhost:8080/kakaos");
+        sb.append("&code=" + code);
+        bw.write(sb.toString());
+        bw.flush();
+
+        //서버의 응답 데이터 가져옴
+        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String line = "";
+        String result = "";
+
+        //result에 토큰이 포함된 응답데이터를 한줄씩 저장
+        while ((line = br.readLine()) != null) {
+            result += line;
+        }
+
+        //JSON 데이터를 파싱하기 위한 JsonParser
+        JsonParser parser = new JsonParser();
+        //값 추출을 위해 파싱한 데이터를 JsonElement로 변환
+        JsonElement element = parser.parse(result);
+
+        //element에서 access_token 값을 얻어옴
+        access_Token = element.getAsJsonObject().get("access_token").getAsString();
+
+        br.close();
+        bw.close();
+
+        return access_Token;
+    }
+
 }

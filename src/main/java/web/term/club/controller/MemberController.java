@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class MemberController {
 
@@ -38,7 +40,7 @@ public class MemberController {
     }
 
     //(3) 카카오 회원가입
-    @GetMapping("/kakaoButton")
+    @GetMapping("/kakaoRegisterButton")
     public String kakaoButton() {
         return "login/kakao";
     }
@@ -59,6 +61,7 @@ public class MemberController {
     @RequestMapping(value = "/kakao")
     public String kakaoLogin(@RequestParam("code") String code, HttpSession session) throws Exception {
         String access_token = memberService.getToken(code);//code로 토큰 받음
+
         memberService.getUserInfo(access_token, session);
         String name = (String) session.getAttribute("name");
         int dataOfBirth = (int) session.getAttribute("dataOfBirth");
@@ -72,9 +75,46 @@ public class MemberController {
     }
 
     //(4) 로그인 화면
-    @PostMapping("/loginButton")
+    @GetMapping("/loginButton")
     public String loginButton() {
-        return "login/logins";
+        StringBuffer url = new StringBuffer();
+        url.append("https://kauth.kakao.com/oauth/authorize?");
+        url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
+        url.append("&redirect_uri=http://localhost:8080/kakaos");
+        url.append("&response_type=code");
+
+        return "redirect:" + url.toString();
+    }
+    @RequestMapping(value = "/kakaos")
+    public String loginNext(@RequestParam("code") String code, HttpSession session) throws Exception {
+        String access_token = memberService.getTokens(code);//code로 토큰 받음
+
+        memberService.getUserInfo(access_token, session);
+
+        String name = (String) session.getAttribute("name");
+
+        Member member = memberService.findMember(name);
+
+        if (member != null) { // 회원이 존재하는 경우
+            session.setAttribute("id", member.getId());
+            return "redirect:/members";
+        } else { // 회원이 존재하지 않는 경우
+            return "login/logins"; // 로그인 페이지로 다시 이동 (로그인 페이지 뷰 이름을 "login"으로 가정)
+        }
+    }
+    @PostMapping("/loginButton")
+    public String kakaoLogin(@RequestParam int dataOfBirth, @RequestParam Gender gender, @RequestParam String department, @RequestParam String phoneNum, @RequestParam String email, HttpSession session) {
+        session.setAttribute("dataOfBirth", dataOfBirth);
+        session.setAttribute("gender", gender);
+        session.setAttribute("department", department);
+        session.setAttribute("phoneNum", phoneNum);
+        session.setAttribute("email", email);
+        StringBuffer url = new StringBuffer();
+        url.append("https://kauth.kakao.com/oauth/authorize?");
+        url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
+        url.append("&redirect_uri=http://localhost:8080/kakao");
+        url.append("&response_type=code");
+        return "redirect:" + url;
     }
     @PostMapping("/logins")
     public String loginMember(@RequestParam String name, @RequestParam int dataOfBirth, @RequestParam Gender gender, @RequestParam String department, @RequestParam String phoneNum, @RequestParam String email, HttpSession session) {
