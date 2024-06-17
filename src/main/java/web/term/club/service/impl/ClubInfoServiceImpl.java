@@ -23,16 +23,20 @@ public class ClubInfoServiceImpl implements ClubInfoService {
     public ClubInfoDto getClubInfo(Club club) throws Exception {
         ClubInfo clubInfo = clubInfoRepository.findById(club.getId()).orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :getClubInfo"));
         ClubInfoDto clubInfoDto = ClubInfoDto.of(clubInfo);
-        clubInfoDto.setClubMembers(clubRepository.findFirstByName(club.getName()).getClubMembers());
+        clubInfoDto.setClubMembers(clubRepository.findById(club.getId())
+                .orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :getClubInfo2"))
+                .getClubMembers());
         return clubInfoDto;
     }
 
     @Override
     public ClubInfo updateClubInfo(ClubInfoDto newClubInfoDto) throws Exception {
-        ClubInfo newClubInfo = newClubInfoDto.toEntity(newClubInfoDto.getClub());
+        Club targetClub = clubRepository.findById(newClubInfoDto.getClub().getId())
+                .orElseThrow(() -> new Exception("Club not found"));
+
+        ClubInfo newClubInfo = newClubInfoDto.toEntity(targetClub);
         clubInfoRepository.save(newClubInfo);
-        //name은 ClubInfo에 없어서 2번 처리해야함
-        Club targetClub = clubRepository.findFirstById(newClubInfoDto.getClub().getId());
+
         targetClub.setName(newClubInfoDto.getName());
         targetClub.setClubInfo(newClubInfo);
         targetClub.setClubMembers(newClubInfoDto.getClubMembers());

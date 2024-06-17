@@ -1,5 +1,6 @@
 package web.term.club.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,10 +18,12 @@ public class ClubMember {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "club_id")
     private Club club;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "student_id")
     private Member student;
 
@@ -31,10 +34,16 @@ public class ClubMember {
     private Rank rank;
 
     @Builder
-    public ClubMember(Club club,  Member student) {
+    public ClubMember(Club club,  Member student, Condition condition) {
         this.club = club;
         this.student = student;
-        this.condition = Condition.BELONG;
+        if (condition == null){
+            this.condition = Condition.BELONG;
+        }
+        else{
+            this.condition = condition;
+        }
+
         this.rank = Rank.NORMAL;
     }
 }

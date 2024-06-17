@@ -1,5 +1,6 @@
 package web.term.club.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,6 +10,7 @@ import java.time.LocalTime;
 
 @Entity
 @Data
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -28,6 +30,7 @@ public class ClubInfo {
     private String img;
 
     @OneToOne(mappedBy = "clubInfo")
+    @JsonIgnore
     private Club club;
 
     private String clubSignUpFile;

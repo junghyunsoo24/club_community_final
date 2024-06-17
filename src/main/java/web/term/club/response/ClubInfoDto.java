@@ -1,8 +1,11 @@
 package web.term.club.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubInfo;
@@ -23,14 +26,19 @@ public class ClubInfoDto {
     private LocalTime meetingTime;
     private String clubSignUpFile;
     private List<ClubMember> clubMembers;
+
+    @JsonIgnore
+    @JsonProperty
     private Club club;
+
     public static ClubInfoDto of(ClubInfo clubInfo) {
         return ClubInfoDto.builder()
+                .id(clubInfo.getId())
                 .name(clubInfo.getClub().getName())
                 .info(clubInfo.getInfo())
                 .meetingTime(clubInfo.getMeetingTime())
                 .img(clubInfo.getImg())
-                .clubMembers(clubInfo.getClub().getClubMembers())
+                .clubMembers(clubInfo.getClub().getClubMembers().stream().toList())
                 .club(clubInfo.getClub())
                 .clubSignUpFile(clubInfo.getClubSignUpFile())
                 .build();
