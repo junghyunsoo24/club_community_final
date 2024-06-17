@@ -154,7 +154,7 @@ public class MemberService {
         StringBuilder sb = new StringBuilder();
         sb.append("grant_type=authorization_code");
         sb.append("&client_id=f2885fad71791b437dbbbc28d1a48796");
-        sb.append("&redirect_uri=http://localhost:8080/kakao");
+        sb.append("&redirect_uri=http://localhost:8081/kakao");
         sb.append("&code=" + code);
         bw.write(sb.toString());
         bw.flush();
@@ -202,7 +202,7 @@ public class MemberService {
         StringBuilder sb = new StringBuilder();
         sb.append("grant_type=authorization_code");
         sb.append("&client_id=f2885fad71791b437dbbbc28d1a48796");
-        sb.append("&redirect_uri=http://localhost:8080/kakaos");
+        sb.append("&redirect_uri=http://localhost:8081/kakaos");
         sb.append("&code=" + code);
         bw.write(sb.toString());
         bw.flush();

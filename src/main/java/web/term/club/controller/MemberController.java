@@ -60,7 +60,7 @@ public class MemberController {
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
         url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
-        url.append("&redirect_uri=http://localhost:8080/kakao");
+        url.append("&redirect_uri=http://localhost:8081/kakao");
         url.append("&response_type=code");
         return "redirect:" + url;
     }
@@ -86,7 +86,7 @@ public class MemberController {
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
         url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
-        url.append("&redirect_uri=http://localhost:8080/kakaos");
+        url.append("&redirect_uri=http://localhost:8081/kakaos");
         url.append("&response_type=code");
 
         return "redirect:" + url.toString();
@@ -125,7 +125,7 @@ public class MemberController {
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
         url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
-        url.append("&redirect_uri=http://localhost:8080/kakao");
+        url.append("&redirect_uri=http://localhost:8081/kakao");
         url.append("&response_type=code");
         return "redirect:" + url;
     }
