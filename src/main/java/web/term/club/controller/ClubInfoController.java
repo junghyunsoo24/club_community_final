@@ -16,10 +16,11 @@ public class ClubInfoController {
     private ClubInfoService clubInfoService;
 
     // 클럽 정보 조회
+    // 검증 o
+    //http://localhost:8081/clubInfo/1
     @GetMapping("/{clubId}")
     public ResponseEntity<?> getClubInfo(@PathVariable Long clubId) {
         try {
-            System.out.println("clubId = " + clubId);
             Club club = new Club();
             club.setId(clubId);
             ClubInfoDto clubInfoDto = clubInfoService.getClubInfo(club);
@@ -28,8 +29,8 @@ public class ClubInfoController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
     // 클럽 정보 업데이트
+    //
     @PostMapping("/update")
     public ResponseEntity<?> updateClubInfo(@RequestBody ClubInfoDto clubInfoDto) {
         try {

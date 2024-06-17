@@ -124,6 +124,9 @@ public class DummyDataLoader implements CommandLineRunner {
                 .reqProfessor(reqProfessor)
                 .status(ClubApprovalStatus.ACTIVE)
                 .build();
+        Member clubMaster = memberRepository.findById(reqStudent.getId()).orElseThrow(() -> new IllegalArgumentException("동아리 창설 학생 조회 실패 :initClub"));;
+        clubMaster.setRole(Role.MASTER);
+        memberRepository.save(clubMaster);
         clubRepository.save(club);
     }
     private void initClubInfo(){
@@ -149,15 +152,18 @@ public class DummyDataLoader implements CommandLineRunner {
         Member lee1 = memberRepository.findFirstByName("lee1");
         Member kim = memberRepository.findFirstByName("kim");
         Club aclub = clubRepository.findFirstByName("AClub");
-
-        initClubMember(aclub,lee1);
-        initClubMember(aclub,kim);
+        Club bclub = clubRepository.findFirstByName("BClub");
+        initClubMember(aclub,lee1, null);
+        initClubMember(aclub,kim, Condition.WAITING);
+        initClubMember(bclub,lee1, Condition.WAITING);
+        initClubMember(bclub,kim, null);
     }
 
-    private void initClubMember(Club club, Member student){
+    private void initClubMember(Club club, Member student, Condition condition ){
         ClubMember clubMember = ClubMember.builder()
                 .club(club)
                 .student(student)
+                .condition(condition)
                 .build();
         club.getClubMembers().add(clubMember);
         clubMemberRepository.save(clubMember);

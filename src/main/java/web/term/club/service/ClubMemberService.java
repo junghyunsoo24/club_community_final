@@ -8,14 +8,12 @@ import web.term.club.domain.Member;
 import java.util.List;
 
 public interface ClubMemberService {
-    // 가입 신청서 반환
-    // 가입 신청서 업로드 및 저장
-    List<ClubMember> getAllClubMember(Club club, Member requestMember) throws Exception;
-
+    List<ClubMember> getAllClubMember(Club requestMember) throws Exception;
+    //ClubMember applyClubMember(Club club, Member requestMember, )
     List<ClubMember> getWaitingClubMember(Club club,Member requestMember)throws Exception;
-    ClubMember approveClubMember(Member requestMember, ClubMember targetMember) throws Exception;
-    ClubMember rejectClubMember(Member requestMember, ClubMember targetMember) throws Exception;
+    ClubMember approveClubMember(Member requestMember,Long clubId ,Member targetMember) throws Exception;
+    ClubMember rejectClubMember(Member requestMember, Long clubId ,Member targetMember) throws Exception;
 
-    ClubMember banClubMember(Member requestMember, ClubMember banedMember) throws Exception;
+    ClubMember banClubMember(Member requestMember, Long clubId ,Member banedMember) throws Exception;
 
 }

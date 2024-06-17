@@ -1,10 +1,8 @@
 package web.term.club.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import web.term.club.domain.Enum.ClubApprovalStatus;
 import web.term.club.domain.Enum.ClubType;
@@ -41,14 +39,17 @@ public class Club {
     private List<ClubMember> clubMembers = new ArrayList<>();;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "club_info_id")
     private ClubInfo clubInfo;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "request_student_id", referencedColumnName = "student_id")
     private Member reqStudent;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "request_professor_id", referencedColumnName = "student_id")
     private Member reqProfessor;
 

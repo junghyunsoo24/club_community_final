@@ -66,7 +66,8 @@ public class FilePropertyService {
     private String basePath;
 
     public Resource loadClubSignUpFile(Long clubId) throws Exception {
-        Club club = clubRepository.findFirstById(clubId);
+
+        Club club = clubRepository.findById(clubId).orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :loadClubSignUpFile"));
         ClubInfo clubInfo = clubInfoRepository.findById(club.getClubInfo().getId())
                 .orElseThrow(() -> new RuntimeException("ClubInfo not found"));
         String filename = clubInfo.getClubSignUpFile();
