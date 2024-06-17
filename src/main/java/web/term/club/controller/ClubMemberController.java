@@ -47,7 +47,7 @@ public class ClubMemberController {
     //승인 대기중인 동아리원 조회
     // 검증 o
     //http://localhost:8081/clubMember/waiting/1?memberId=1
-    @GetMapping("/waiting/{clubMemberId}")
+    @GetMapping("/waiting/{memberId}")
     public ResponseEntity<?> getWaitingClubMembers(@PathVariable Long clubId, @RequestParam Long memberId) {
         try {
             Club club = new Club();
@@ -68,7 +68,7 @@ public class ClubMemberController {
     //해당 멤버 승인
     // 검증 o
     //http://localhost:8081/clubMember/approve/1?requesterId=1&clubId=1
-    @PostMapping("/approve/{memberId}")
+    @PostMapping("/approve/{clubMemberId}")
     public ResponseEntity<?> approveClubMember(@RequestParam Long requesterId, @PathVariable Long clubMemberId) {
         try {
             ClubMember clubMember = clubMemberService.getClubMember(clubMemberId);
