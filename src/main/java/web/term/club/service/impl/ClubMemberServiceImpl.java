@@ -105,4 +105,19 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         clubMember.setCondition(Condition.WITHDRAWAL);
         return clubMemberRepository.save(clubMember);
     }
+
+    @Override
+    public ClubMember applyClub(Long id, String name, Long clubId) {
+        Club targetClub = clubRepository.findById(clubId).orElseThrow(() -> new IllegalArgumentException("동아리 가입용 동아리 조회"));
+        Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("동아리 가입용 사람 조회"));
+        ClubMember newClubMember = ClubMember.builder()
+                .club(targetClub)
+                .condition(Condition.WAITING)
+                .student(member)
+                .build();
+        clubMemberRepository.save(newClubMember);
+        targetClub.getClubMembers().add(newClubMember);
+        clubRepository.save(targetClub);
+        return newClubMember;
+    }
 }

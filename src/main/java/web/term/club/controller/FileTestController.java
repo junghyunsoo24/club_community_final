@@ -8,9 +8,11 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubInfo;
+import web.term.club.domain.ClubMember;
 import web.term.club.domain.FilePropertyResponse;
 import web.term.club.response.ApiResponse;
 import web.term.club.response.ResponseCode;
+import web.term.club.service.ClubMemberService;
 import web.term.club.service.FilePropertyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,9 @@ public class FileTestController {
     @Autowired
     private final FilePropertyService filePropertyService;
 
+    @Autowired
+    private final ClubMemberService clubMemberService;
+
     @GetMapping
     public String fileUpload(){
         return "file-upload";
@@ -40,10 +45,13 @@ public class FileTestController {
     @ResponseBody
     @PostMapping
     // 파일 업로드 -> 가입신청이 될 예정
-    public ApiResponse<FilePropertyResponse> uploadFile(@ModelAttribute web.term.club.controller.ApplyClubForm form) throws IOException {
+    public ApiResponse<FilePropertyResponse> uploadFileAndApplyClub(@ModelAttribute web.term.club.controller.ApplyClubForm form) throws IOException {
         MultipartFile attachedFile = form.getAttachedFile();
         String name = form.getName();
-        System.out.println("name = " + name);
+        Long id = form.getStudentId();
+        Long clubId = form.getClubId();
+        String department = form.getDepartment();
+        ClubMember newClubMember =  clubMemberService.applyClub(id, name, clubId);
         FilePropertyResponse filePropertyResponse = filePropertyService.storeFile(attachedFile);
         return ApiResponse.response(ResponseCode.Created, filePropertyResponse);
     }
@@ -56,6 +64,7 @@ public class FileTestController {
     private String basePath;
 
     // 사용자의 파일 다운로드
+    // 파일 경로에 넣어놓은 clubinfo에 저장된 파일명 전달, 검증 완료
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadClubSignUpFile(@RequestParam Long clubId) {
         try {
