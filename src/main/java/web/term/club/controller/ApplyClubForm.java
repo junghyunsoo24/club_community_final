@@ -8,7 +8,8 @@ import java.util.List;
 @Data
 public class ApplyClubForm {
     private String name;
-    private String studentId;
+    private Long studentId;
+    private Long clubId;
     private String department;
     private MultipartFile attachedFile;
 }
