@@ -43,14 +43,22 @@ public class Club {
     @JoinColumn(name = "club_info_id")
     private ClubInfo clubInfo;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "request_student_id", referencedColumnName = "student_id")
-    private Member reqStudent;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String applicantName;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "request_professor_id", referencedColumnName = "student_id")
-    private Member reqProfessor;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String applicantDepartment;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String applicantContact;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String professorName;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String professorDepartment;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String professorContact;
 
 }

@@ -46,4 +46,18 @@ public class ClubMember {
 
         this.rank = Rank.NORMAL;
     }
+
+    @Builder
+    public ClubMember(Club club,  Member student, Condition condition, Rank rank) {
+        this.club = club;
+        this.student = student;
+        if (condition == null){
+            this.condition = Condition.BELONG;
+        }
+        else{
+            this.condition = condition;
+        }
+
+        this.rank = rank;
+    }
 }

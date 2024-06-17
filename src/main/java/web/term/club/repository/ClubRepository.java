@@ -7,9 +7,7 @@ import web.term.club.domain.Member;
 import java.util.List;
 
 public interface ClubRepository extends JpaRepository<Club, Long> {
-    List<Club> findByReqStudent(Member reqStudent);
     Club findFirstByName(String name);
     Club findFirstById(Long id);
 
-    Club findFirstByReqStudent(Member masterMember);
 }
