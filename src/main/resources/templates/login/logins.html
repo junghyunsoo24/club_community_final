@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<body>
+<h1>로그인</h1>
+<form th:action="@{/logins}" method="post">
+    <div>
+        <label for="name">이름:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+        <label for="dataOfBirth">생년월일:</label>
+        <input type="number" id="dataOfBirth" name="dataOfBirth" required>
+    </div>
+    <div>
+        <label for="gender">성별:</label>
+        <select id="gender" name="gender" required>
+            <option value="MALE">남성</option>
+            <option value="FEMALE">여성</option>
+        </select>
+    </div>
+    <div>
+        <label for="department">학과:</label>
+        <input type="text" id="department" name="department" required>
+    </div>
+    <div>
+        <label for="phoneNum">전화번호:</label>
+        <input type="text" id="phoneNum" name="phoneNum" required>
+    </div>
+    <div>
+        <label for="email">이메일:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <button type="submit">로그인 버튼</button>
+</form>
+</body>
+</html>

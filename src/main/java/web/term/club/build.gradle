@@ -88,3 +88,6 @@ bootJar {
 		into 'static/docs'
 	}
 }
+compileJava {
+	options.compilerArgs += '-parameters'
+}

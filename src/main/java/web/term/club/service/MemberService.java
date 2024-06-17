@@ -45,6 +45,17 @@ public class MemberService {
         return memberRepository.findById(id).orElse(null);
     }
 
+    public Member loginMember(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email) {
+        // DB에서 회원 조회 (이름, 생년월일, 성별, 학과, 전화번호, 이메일 모두 일치하는 회원)
+        Member member = memberRepository.findByNameAndDataOfBirthAndGenderAndDepartmentAndPhoneNumAndEmail(name, dataOfBirth, gender, department, phoneNum, email);
+
+        if (member != null) {
+            return member; // 회원이 존재하면 Member 객체 반환
+        } else {
+            return null; // 회원이 존재하지 않으면 null 반환
+        }
+    }
+
     public void getUserInfo(String access_token,HttpSession session) throws Exception {
         ArrayList<Object> list = new ArrayList<Object>();
 
