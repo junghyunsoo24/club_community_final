@@ -1,7 +1,11 @@
 package web.term.club.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import web.term.club.domain.Enum.Gender;
 import web.term.club.domain.Member;
 import web.term.club.service.MemberService;
@@ -13,7 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MemberController {
@@ -54,7 +60,7 @@ public class MemberController {
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
         url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
-        url.append("&redirect_uri=http://localhost:8080/kakao");
+        url.append("&redirect_uri=http://localhost:8081/kakao");
         url.append("&response_type=code");
         return "redirect:" + url;
     }
@@ -80,13 +86,13 @@ public class MemberController {
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
         url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
-        url.append("&redirect_uri=http://localhost:8080/kakaos");
+        url.append("&redirect_uri=http://localhost:8081/kakaos");
         url.append("&response_type=code");
 
         return "redirect:" + url.toString();
     }
     @RequestMapping(value = "/kakaos")
-    public String loginNext(@RequestParam("code") String code, HttpSession session) throws Exception {
+    public String loginNext(@RequestParam("code") String code, HttpSession session, HttpServletResponse response) throws Exception {
         String access_token = memberService.getTokens(code);//code로 토큰 받음
 
         memberService.getUserInfo(access_token, session);
@@ -97,7 +103,14 @@ public class MemberController {
 
         if (member != null) { // 회원이 존재하는 경우
             session.setAttribute("id", member.getId());
-            return "redirect:/members";
+            // 리디렉션 URL 변경
+            String redirectUrl = "http://localhost:3000"; // 원하는 URL로 변경
+
+            // 클라이언트에게 리디렉션 응답 전송
+            response.sendRedirect(redirectUrl);
+
+            // 컨트롤러 메서드는 더 이상 뷰 이름을 반환하지 않음
+            return null;
         } else { // 회원이 존재하지 않는 경우
             return "login/logins"; // 로그인 페이지로 다시 이동 (로그인 페이지 뷰 이름을 "login"으로 가정)
         }
@@ -112,7 +125,7 @@ public class MemberController {
         StringBuffer url = new StringBuffer();
         url.append("https://kauth.kakao.com/oauth/authorize?");
         url.append("client_id=" + "f2885fad71791b437dbbbc28d1a48796");
-        url.append("&redirect_uri=http://localhost:8080/kakao");
+        url.append("&redirect_uri=http://localhost:8081/kakao");
         url.append("&response_type=code");
         return "redirect:" + url;
     }
@@ -138,5 +151,61 @@ public class MemberController {
         Member member = memberService.getMemberById(memberId);
         model.addAttribute("member", member);
         return "login/members";
+    }
+
+    @GetMapping("localhost:8081/user")
+    public String showAll(HttpServletRequest request, Model model, HttpSession session) throws Exception { // HttpServletRequest 추가
+        String token = request.getHeader("Authorization"); // Authorization 헤더에서 토큰 추출
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer " 문자열 제거
+
+            memberService.getTokenInfo(token, session);
+
+            String name = (String) session.getAttribute("name");
+
+            Member member = memberService.findMember(name);
+            member.getId();
+            member.getName();
+            member.getDataOfBirth();
+            member.getGender();
+            member.getDepartment();
+            member.getPhoneNum();
+            member.getEmail();
+            member.getRole();
+
+            return "login/members"; // 사용자 정보 페이지 반환
+        } else {
+            return "redirect:/join"; // 토큰이 유효하지 않으면 회원가입 페이지로 이동
+        }
+    }
+
+    @GetMapping("user")
+    public ResponseEntity<Map<String, Object>> showAll(HttpServletRequest request, HttpSession session) throws Exception {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+
+            memberService.getTokenInfo(token, session);
+
+            String name = (String) session.getAttribute("name");
+            Member member = memberService.findMember(name);
+            if (member == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 회원 정보가 없을 경우 401 Unauthorized
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", member.getId());
+            response.put("name", member.getName());
+            response.put("dateOfBirth", member.getDataOfBirth());
+            response.put("gender", member.getGender());
+            response.put("department", member.getDepartment());
+            response.put("phoneNum", member.getPhoneNum());
+            response.put("email", member.getEmail());
+            response.put("role", member.getRole());
+
+            return ResponseEntity.ok(response); // JSON 형태로 회원 정보 반환
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 토큰이 유효하지 않을 경우 401 Unauthorized
+        }
     }
 }
