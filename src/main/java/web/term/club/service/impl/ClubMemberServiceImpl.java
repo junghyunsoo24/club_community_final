@@ -11,9 +11,12 @@ import web.term.club.domain.Member;
 import web.term.club.repository.ClubMemberRepository;
 import web.term.club.repository.ClubRepository;
 import web.term.club.repository.MemberRepository;
+import web.term.club.response.ClubMemberDto;
 import web.term.club.service.ClubMemberService;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class ClubMemberServiceImpl implements ClubMemberService {
@@ -26,6 +29,22 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+    @Override
+    public ClubMember getClubMember(Long id) throws Exception{
+        ClubMember clubMember = clubMemberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(" :targetClub"));
+        return clubMember;
+    }
+
+    public List<ClubMemberDto> convertToClubMemberDTOList(List<ClubMember> clubMembers) {
+        return clubMembers.stream().map(cm -> new ClubMemberDto(
+                cm.getId(),
+                cm.getClub(),
+                cm.getStudent(),
+                cm.getStudent().getName(),
+                cm.getCondition(),
+                cm.getRank()
+        )).collect(Collectors.toList());
+    }
 
     @Override
     public List<ClubMember> getAllClubMember(Club club) throws Exception {
