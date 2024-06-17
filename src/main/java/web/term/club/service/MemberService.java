@@ -99,6 +99,42 @@ public class MemberService {
         session.setAttribute("name", nickname);
     }
 
+    public void getTokenInfo(String access_token,HttpSession session) throws Exception {
+        ArrayList<Object> list = new ArrayList<Object>();
+
+        final String requestUrl = "https://kapi.kakao.com/v2/user/me";
+
+        URL url = new URL(requestUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Authorization", "Bearer " + access_token);
+
+        BufferedReader bf = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String line = "";
+        String result = "";
+
+        while ((line = bf.readLine()) != null) {
+            result +=line;
+        }
+
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(result);
+
+        JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
+        JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+
+        //콘솔창 확인 후 필요한 정보 추출
+        System.out.println("----------properties"+properties);
+        System.out.println("----------kakao_account"+kakao_account);
+
+        String nickname = properties.getAsJsonObject().get("nickname").getAsString();
+        Long id = element.getAsJsonObject().get("id").getAsLong();
+
+        list.add(nickname);
+
+        session.setAttribute("name", nickname);
+    }
+
     public String getToken(String code) throws Exception {
         String access_Token = "";
 
