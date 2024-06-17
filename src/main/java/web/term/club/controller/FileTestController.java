@@ -39,9 +39,11 @@ public class FileTestController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     @PostMapping
+    // 파일 업로드 -> 가입신청이 될 예정
     public ApiResponse<FilePropertyResponse> uploadFile(@ModelAttribute web.term.club.controller.ApplyClubForm form) throws IOException {
         MultipartFile attachedFile = form.getAttachedFile();
-        //null처리와 response 하나로 병합 필요
+        String name = form.getName();
+        System.out.println("name = " + name);
         FilePropertyResponse filePropertyResponse = filePropertyService.storeFile(attachedFile);
         return ApiResponse.response(ResponseCode.Created, filePropertyResponse);
     }
@@ -50,7 +52,6 @@ public class FileTestController {
     public ApiResponse<FilePropertyResponse> deleteFile(@PathVariable Long id){
         return ApiResponse.response(ResponseCode.OK, filePropertyService.delete(id));
     }
-
     @Value("${file.root-path}")
     private String basePath;
 
@@ -58,6 +59,7 @@ public class FileTestController {
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadClubSignUpFile(@RequestParam Long clubId) {
         try {
+            System.out.println("clubId = " + clubId);
             Resource file = filePropertyService.loadClubSignUpFile(clubId);
             return ResponseEntity.ok().body(file);
         } catch (Exception e) {
