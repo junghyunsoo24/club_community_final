@@ -2,10 +2,7 @@ package web.term.club.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubInfo;
@@ -13,11 +10,13 @@ import web.term.club.domain.ClubMember;
 import web.term.club.domain.Member;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
+@Getter
 public class ClubInfoDto {
     private Long id;
     private String name;
@@ -25,15 +24,16 @@ public class ClubInfoDto {
     private String img;
     private LocalTime meetingTime;
     private String clubSignUpFile;
-    private List<ClubMember> clubMembers;
+    @Builder.Default
+    private List<ClubMember> clubMembers = new ArrayList<>();;;
 
-    @JsonIgnore
-    @JsonProperty
+
+    @JsonProperty("club")
     private Club club;
 
     public static ClubInfoDto of(ClubInfo clubInfo) {
         return ClubInfoDto.builder()
-                .id(clubInfo.getId())
+                .id(clubInfo.getClub().getId())
                 .name(clubInfo.getClub().getName())
                 .info(clubInfo.getInfo())
                 .meetingTime(clubInfo.getMeetingTime())
