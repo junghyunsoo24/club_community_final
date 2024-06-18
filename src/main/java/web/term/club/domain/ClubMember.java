@@ -33,6 +33,7 @@ public class ClubMember {
     @Enumerated(EnumType.STRING)
     private Rank rank;
 
+    private String filePath;
     @Builder
     public ClubMember(Club club,  Member student, Condition condition) {
         this.club = club;
