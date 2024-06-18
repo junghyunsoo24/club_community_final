@@ -67,8 +67,8 @@ public class FileTestController {
 
     // 사용자의 파일 다운로드
     // 파일 경로에 넣어놓은 clubinfo에 저장된 파일명 전달, 검증 완료
-    @GetMapping("/download")
-    public ResponseEntity<Resource> downloadClubSignUpFile(@RequestParam Long clubId) {
+    @GetMapping("/download/{clubId}")
+    public ResponseEntity<Resource> downloadClubSignUpFile(@PathVariable Long clubId) {
         try {
             System.out.println("clubId = " + clubId);
             Resource file = filePropertyService.loadClubSignUpFile(clubId);

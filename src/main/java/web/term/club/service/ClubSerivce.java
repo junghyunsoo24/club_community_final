@@ -1,6 +1,5 @@
 package web.term.club.service;
 
-import web.term.club.domain.ClubInfo;
 import web.term.club.request.ClubAcceptRequest;
 import web.term.club.response.ClubDto;
 import web.term.club.domain.Club;
@@ -16,9 +15,11 @@ public interface ClubSerivce {
 
     Club club(Long clubId) throws Exception;
 
-    List<ClubDto> myOwnClubs() throws Exception;
+    List<ClubDto> myOwnClubs(Long memberId) throws Exception;
 
     ClubDto chairmansClub(Long memberId) throws Exception;
 
-    Club saveClub(Club club);
+    ClubDto chairmansWaitClub(Long memberId) throws Exception;
+
+    List<ClubDto> chairmansClubs(Long memberId) throws Exception;
 }
