@@ -82,8 +82,10 @@ public class DummyDataLoader implements CommandLineRunner {
                 "010-1263-5678","1263@naver.com\"", Role.NORMAL);
         initMember("Master", 2000,Gender.MALE,"Computer Science","123-456-7890", "dummy@example.com",Role.MASTER); // createDummyMember()
         initMember("Dummy", 2000,Gender.MALE,"Computer Science","123-456-7890", "dummy@example.com",Role.NORMAL); // createDummyMember2()
-        initMember("김원태", 19921212, Gender.FEMALE, "computer software engineering",
+        initMember("김운희", 19921212, Gender.FEMALE, "computer software engineering",
                 "010-1212-3232","11231423@naver.com\"", Role.NORMAL);
+        initMember("박사장", 19921212, Gender.FEMALE, "computer software engineering",
+                "010-0000-1111","k1k1@naver.com\"", Role.MANAGER);
     }
 
     private void initMember(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email, Role role){

@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.term.club.domain.ClubMember;
-import web.term.club.domain.Enum.Condition;
-import web.term.club.domain.Enum.Rank;
+import web.term.club.domain.Enum.*;
 import web.term.club.domain.Member;
 import web.term.club.repository.ClubMemberRepository;
 import web.term.club.repository.MemberRepository;
+import web.term.club.request.ClubAcceptRequest;
 import web.term.club.response.ClubDto;
-import web.term.club.domain.Enum.ClubApprovalStatus;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubInfo;
 import web.term.club.domain.Enum.ClubApprovalStatus;
@@ -38,7 +37,6 @@ public class ClubServiceImpl implements ClubSerivce {
 
     @Override
     public ClubDto addClub(ClubDto clubDto) throws Exception {
-        // chairman은 접속 중인 사람이어야 함
         clubDto.setClubApprovalStatus(ClubApprovalStatus.WAITING);
         Club club = clubDto.toEntity();
         ClubInfo clubInfo = new ClubInfo(club, null, null, null);
@@ -50,20 +48,20 @@ public class ClubServiceImpl implements ClubSerivce {
     }
 
     @Override
-    public ClubDto acceptClub(ClubDto clubDto) throws Exception {
-        // 임시 관리자 멤버 정의
-        Member master = memberRepository.findById(1L).orElseThrow(IllegalArgumentException::new);
+    public ClubDto acceptClub(ClubAcceptRequest clubAcceptRequest) throws Exception {
+        Member master = memberRepository.findById(clubAcceptRequest.getMemberId()).orElseThrow(IllegalArgumentException::new);
         Club club;
-        if ( /*master.userType == UserType.마스터*/ 1 == 1) {
-            club = clubRepository.findById(clubDto.getId()).orElseThrow(IllegalArgumentException::new);
+        if (master.getRole() == Role.MANAGER) {
+            club = clubRepository.findById(clubAcceptRequest.getId()).orElseThrow(IllegalArgumentException::new);
             ClubApprovalStatus tempStatus = club.getStatus();
-            club.setStatus(clubDto.getClubApprovalStatus());
-            if (clubDto.getClubApprovalStatus() == ClubApprovalStatus.REFUSE) {
-                club.setRefuseInfo(clubDto.getRefuseInfo());
+            club.setStatus(clubAcceptRequest.getClubApprovalStatus());
+            if (clubAcceptRequest.getClubApprovalStatus() == ClubApprovalStatus.REFUSE) {
+                club.setRefuseInfo(clubAcceptRequest.getRefuseInfo());
             }
-            else if (tempStatus == ClubApprovalStatus.WAITING && clubDto.getClubApprovalStatus() == ClubApprovalStatus.ACTIVE) {
+            else if (tempStatus == ClubApprovalStatus.WAITING && clubAcceptRequest.getClubApprovalStatus() == ClubApprovalStatus.ACTIVE) {
                 Member chairman = memberRepository.findFirstByName(club.getApplicantName());
                 ClubMember clubMember = new ClubMember(club, chairman, Condition.BELONG, Rank.CHAIRMAN);
+                chairman.setRole(Role.MASTER);
                 clubRepository.save(club);
                 clubMemberRepository.save(clubMember);
             }
