@@ -59,7 +59,6 @@ public class DummyDataLoader implements CommandLineRunner {
         for (BoardType boardType : BoardType.values()) {
             IntStream.rangeClosed(1, 6).forEach(i -> {
                 Post post = createDummyPost(member, boardType);
-                memberRepository.save(member);
                 postRepository.save(post);
             });
         }

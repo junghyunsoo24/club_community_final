@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import web.term.club.domain.Club;
+import web.term.club.domain.ClubInfo;
 import web.term.club.response.ClubInfoDto;
 import web.term.club.service.ClubInfoService;
+
+import java.time.LocalTime;
 
 @RestController
 @RequestMapping("/clubInfo")
@@ -40,45 +44,34 @@ public class ClubInfoController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    //실험용 body
-    /*
-    {
-  "id": 1,
-  "name": "CClub",
-  "info": "This is a description of the Example Club.",
-  "img": "aaaaa",
-  "meetingTime": "18:00:00",
-  "clubSignUpFile": "http://example.com/signup_form.pdf",
-  "club": {
-    "id": 1,
-    "name": "AClub",
-    "clubType": "CENTRAL",
-    "status": "ACTIVE",
-    "refuseInfo": "",
-    "reqStudent": {
-      "id": 2,
-      "student_id": "2"
-    },
-    "reqProfessor": {
-      "id": 3,
-      "student_id": "3"
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createClubInfo(@RequestPart("clubName") String clubName,
+                                            @RequestPart("clubInfo") String clubInfo,
+                                            @RequestPart("clubMeetTime") String clubMeetTime,
+                                            @RequestPart(value = "clubImg", required = false) MultipartFile clubImg,
+                                            @RequestPart(value = "applicationFile", required = false) MultipartFile applicationFile) {
+        try {
+            Club club = clubInfoService.findFirstByName(clubName);
+            ClubInfo newClubInfo = new ClubInfo();
+            newClubInfo.setInfo(clubInfo);
+            newClubInfo.setMeetingTime(LocalTime.parse(clubMeetTime.replaceAll("\"", ""))); // 따옴표 제거
+            if (clubImg != null && !clubImg.isEmpty()) {
+                newClubInfo.setImg(saveFile(clubImg));
+            }
+            if (applicationFile != null && !applicationFile.isEmpty()) {
+                newClubInfo.setClubSignUpFile(saveFile(applicationFile));
+            }
+            newClubInfo.setClub(club);
+            clubInfoService.saveClubInfo(newClubInfo);
+            return new ResponseEntity<>("Club info created successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
-  },
-"clubMembers" :[
-  {
-    "id": 1,
-    "condition": "BELONG",
-    "rank": "NORMAL"
-  },
-  {
-    "id": 2,
-    "condition": "BELONG",
-    "rank": "ADMINISTRATOR"
-  }
 
-]
-}
-
-     */
-
+    private String saveFile(MultipartFile file) {
+        // 파일 저장 로직 구현
+        return "C:\\Users\\sunni\\file-repository";
+    }
 }
