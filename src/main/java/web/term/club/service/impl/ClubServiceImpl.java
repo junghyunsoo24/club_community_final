@@ -95,4 +95,14 @@ public class ClubServiceImpl implements ClubSerivce {
         List<ClubDto> clubDtos = clubMembers.stream().map(m -> ClubDto.of(m.getClub())).collect(Collectors.toList());
         return clubDtos;
     }
+
+    @Override
+    public ClubDto chairmansClub(Long memberId) throws Exception {
+        // 임시 멤버 정의
+        Member user = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+        ClubMember clubMember = clubMemberRepository.findFirstByStudentAndRank(user, Rank.CHAIRMAN);
+
+        ClubDto clubDto = ClubDto.of(clubMember.getClub());
+        return clubDto;
+    }
 }

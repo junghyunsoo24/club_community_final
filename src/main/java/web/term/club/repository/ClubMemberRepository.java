@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubMember;
 import web.term.club.domain.Enum.Condition;
+import web.term.club.domain.Enum.Rank;
 import web.term.club.domain.Member;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
     ClubMember findByClubAndStudent(Club club, Member student);
 
     List<ClubMember> findByStudentAndCondition(Member student, Condition condition);
+
+    ClubMember findFirstByStudentAndRank(Member student, Rank rank);
 }

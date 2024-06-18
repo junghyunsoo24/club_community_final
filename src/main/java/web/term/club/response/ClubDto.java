@@ -3,6 +3,7 @@ package web.term.club.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import web.term.club.domain.*;
 import web.term.club.domain.Enum.ClubApprovalStatus;
 import web.term.club.domain.Enum.ClubType;
@@ -10,6 +11,7 @@ import web.term.club.domain.Enum.ClubType;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ClubDto {
 
     private Long id;
