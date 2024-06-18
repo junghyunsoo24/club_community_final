@@ -18,6 +18,7 @@ public class FileRepository {
             throw new RuntimeException(e);
         }
     }
+
     public void delete(FileProperty fileProperty) {
         try{
             File fsFile = new File(fileProperty.getFilePath());

@@ -56,6 +56,7 @@ public class FileTestController {
 
         return ApiResponse.response(ResponseCode.Created, filePropertyResponse);
     }
+
     @DeleteMapping("/{id}")
     @ResponseBody
     public ApiResponse<FilePropertyResponse> deleteFile(@PathVariable Long id){
