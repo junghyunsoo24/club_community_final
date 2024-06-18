@@ -18,5 +18,5 @@ public interface ClubMemberService {
     ClubMember getClubMember(Long id) throws Exception;
     ClubMember banClubMember(Member requestMember, Long clubId ,Member banedMember) throws Exception;
 
-    ClubMember applyClub(Long id, String name, Long clubId);
+    ClubMember applyClub(Long id, String name, Long clubId, String filePath);
 }

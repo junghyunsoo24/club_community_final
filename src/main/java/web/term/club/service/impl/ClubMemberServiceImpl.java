@@ -107,7 +107,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
-    public ClubMember applyClub(Long id, String name, Long clubId) {
+    public ClubMember applyClub(Long id, String name, Long clubId, String filePath) {
         Club targetClub = clubRepository.findById(clubId).orElseThrow(() -> new IllegalArgumentException("동아리 가입용 동아리 조회"));
         Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("동아리 가입용 사람 조회"));
         ClubMember newClubMember = ClubMember.builder()
@@ -115,6 +115,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
                 .condition(Condition.WAITING)
                 .student(member)
                 .build();
+        newClubMember.setFilePath(filePath);
         clubMemberRepository.save(newClubMember);
         targetClub.getClubMembers().add(newClubMember);
         clubRepository.save(targetClub);
