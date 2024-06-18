@@ -54,8 +54,8 @@ public class DummyDataLoader implements CommandLineRunner {
     }
 
     private void initPost(){
-        Member member = memberRepository.findFirstByName("Master");
-        Member member2 = memberRepository.findFirstByName("Dummy");
+        Member member = memberRepository.findFirstByName("이회장");
+        Member member2 = memberRepository.findFirstByName("김더미");
         for (BoardType boardType : BoardType.values()) {
             IntStream.rangeClosed(1, 6).forEach(i -> {
                 Post post = createDummyPost(member, boardType);
