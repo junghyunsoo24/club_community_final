@@ -103,4 +103,9 @@ public class ClubServiceImpl implements ClubSerivce {
         ClubDto clubDto = ClubDto.of(clubMember.getClub());
         return clubDto;
     }
+
+    @Override
+    public Club saveClub(Club club) {
+        return clubRepository.save(club);
+    }
 }
