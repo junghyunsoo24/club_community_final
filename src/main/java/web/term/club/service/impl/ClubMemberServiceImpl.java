@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubMember;
 import web.term.club.domain.Enum.Condition;
+import web.term.club.domain.Enum.Rank;
 import web.term.club.domain.Enum.Role;
 import web.term.club.domain.Member;
 import web.term.club.repository.ClubMemberRepository;
@@ -140,7 +141,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     public Resource getApplyClubFile(ClubMember clubMember, Long requestMemberId) throws Exception{
         Member masterMember = memberRepository.findById(requestMemberId).orElseThrow(() -> new IllegalArgumentException("업무 처리자 확인"));
         if(masterMember.getRole() != Role.MASTER){
-            //System.out.println("함정에 빠졌다.");
             return null;
         }
         ClubMember targetClubMember = clubMemberRepository.findById(clubMember.getId()).orElseThrow(() -> new IllegalArgumentException("처리 대상자 확인"));
@@ -152,5 +152,16 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         } else {
             throw new RuntimeException("File not found");
         }
+    }
+
+    @Override
+    public ClubMember changeRank(Long requesterId, String rank, Long targetclubMemberId) throws Exception {
+        Member masterMember = memberRepository.findById(requesterId).orElseThrow(() -> new IllegalArgumentException("마스터 확인"));
+        if(masterMember.getRole() != Role.MASTER){
+            return null;
+        }
+        ClubMember changedMember = clubMemberRepository.findById(targetclubMemberId).orElseThrow(() -> new IllegalArgumentException("처리 대상자 확인"));
+        changedMember.setRank(Rank.valueOf(rank));
+        return clubMemberRepository.save(changedMember);
     }
 }
