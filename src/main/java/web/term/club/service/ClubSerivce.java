@@ -15,7 +15,9 @@ public interface ClubSerivce {
 
     Club club(Long clubId) throws Exception;
 
-    List<ClubDto> myOwnClubs() throws Exception;
+    List<ClubDto> myOwnClubs(Long memberId) throws Exception;
 
     ClubDto chairmansClub(Long memberId) throws Exception;
+
+    ClubDto getChairmansWaitClub(Long memberId) throws Exception;
 }
