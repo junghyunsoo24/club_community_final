@@ -65,10 +65,20 @@ public class ClubController {
         }
     }
 
+    @GetMapping("/clubs/chairman/{memberId}")
+    public ResponseEntity<?> getChairmansAllClub(@PathVariable Long memberId) throws Exception {
+        try {
+            List<ClubDto> clubs = clubSerivce.chairmansClubs(memberId);
+            return new ResponseEntity<>(clubs, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/club/chairman/wait/{memberId}")
     public ResponseEntity<?> getChairmansWaitClub(@PathVariable Long memberId) throws Exception {
         try {
-            ClubDto club = clubSerivce.getChairmansWaitClub(memberId);
+            ClubDto club = clubSerivce.chairmansWaitClub(memberId);
             return new ResponseEntity<>(club, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

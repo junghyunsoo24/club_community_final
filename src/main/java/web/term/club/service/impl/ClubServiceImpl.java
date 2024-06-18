@@ -64,6 +64,9 @@ public class ClubServiceImpl implements ClubSerivce {
                 chairman.setRole(Role.MASTER);
                 clubRepository.save(club);
                 clubMemberRepository.save(clubMember);
+//                Member professor = memberRepository.findFirstByName(club.getProfessorName());
+//                ClubMember clubProfessor = new ClubMember(club, professor, Condition.BELONG, Rank.ADMINISTRATOR);
+//                clubMemberRepository.save(clubProfessor);
             }
             return ClubDto.of(club);
         }
@@ -105,7 +108,17 @@ public class ClubServiceImpl implements ClubSerivce {
     }
 
     @Override
-    public ClubDto getChairmansWaitClub(Long memberId) throws Exception {
+    public List<ClubDto> chairmansClubs(Long memberId) throws Exception {
+        // 임시 멤버 정의
+        Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+        List<Club> clubs = clubRepository.findByApplicantName(member.getName());
+        List<ClubDto> clubDtos = clubs.stream().map(c -> ClubDto.of(c)).collect(Collectors.toList());
+
+        return clubDtos;
+    }
+
+    @Override
+    public ClubDto chairmansWaitClub(Long memberId) throws Exception {
         // 임시 멤버 정의
         Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
         Club club = clubRepository.findByApplicantNameAndStatus(member.getName(), ClubApprovalStatus.WAITING);
