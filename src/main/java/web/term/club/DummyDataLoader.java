@@ -82,6 +82,8 @@ public class DummyDataLoader implements CommandLineRunner {
                 "010-1263-5678","1263@naver.com\"", Role.NORMAL);
         initMember("Master", 2000,Gender.MALE,"Computer Science","123-456-7890", "dummy@example.com",Role.MASTER); // createDummyMember()
         initMember("Dummy", 2000,Gender.MALE,"Computer Science","123-456-7890", "dummy@example.com",Role.NORMAL); // createDummyMember2()
+        initMember("김원태", 19921212, Gender.FEMALE, "computer software engineering",
+                "010-1212-3232","11231423@naver.com\"", Role.NORMAL);
     }
 
     private void initMember(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email, Role role){
@@ -120,8 +122,12 @@ public class DummyDataLoader implements CommandLineRunner {
         Club club = Club.builder()
                 .name(name)
                 .clubType(clubType)
-                .reqStudent(reqStudent)
-                .reqProfessor(reqProfessor)
+                .applicantName(reqStudent.getName())
+                .applicantDepartment(reqStudent.getDepartment())
+                .applicantContact(reqStudent.getPhoneNum())
+                .professorName(reqProfessor.getName())
+                .professorDepartment(reqProfessor.getDepartment())
+                .professorContact(reqProfessor.getPhoneNum())
                 .status(ClubApprovalStatus.ACTIVE)
                 .build();
         Member clubMaster = memberRepository.findById(reqStudent.getId()).orElseThrow(() -> new IllegalArgumentException("동아리 창설 학생 조회 실패 :initClub"));;
@@ -129,6 +135,7 @@ public class DummyDataLoader implements CommandLineRunner {
         memberRepository.save(clubMaster);
         clubRepository.save(club);
     }
+
     private void initClubInfo(){
         Club aclub = clubRepository.findFirstByName("AClub");
         Club bclub = clubRepository.findFirstByName("BClub");
