@@ -145,6 +145,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         }
         ClubMember targetClubMember = clubMemberRepository.findById(clubMember.getId()).orElseThrow(() -> new IllegalArgumentException("처리 대상자 확인"));
         String filePath = targetClubMember.getFilePath();
+        System.out.println("filePath = " + filePath);
         Path file = Paths.get(filePath).normalize();
         Resource resource = new UrlResource(file.toUri());
         if (resource.exists()) {
