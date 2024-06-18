@@ -7,4 +7,6 @@ import web.term.club.response.ClubInfoDto;
 public interface ClubInfoService {
     ClubInfoDto getClubInfo(Club club) throws Exception;
     ClubInfo updateClubInfo(ClubInfoDto newClubInfo) throws Exception;
+    void saveClubInfo(ClubInfo clubInfo);
+    Club findFirstByName(String name);
 }
