@@ -66,26 +66,31 @@ public class DummyDataLoader implements CommandLineRunner {
     }
 
     private void initMember(){
-        initMember("kim", 20000908, Gender.MALE, "computer software engineering",
-                "010-1234-5678","20190826@kumoh.ac.kr", Role.NORMAL);
-        initMember("lee1", 20001111, Gender.MALE, "Electronic Engineering",
+        initMember("김회장", 20000908, Gender.MALE, "computer software engineering",
+                "010-1234-5678","20190826@kumoh.ac.kr", Role.MASTER);
+        initMember("이진철", 20001111, Gender.MALE, "Electronic Engineering",
                 "010-7676-5432","7676@naver.com", Role.NORMAL);
-        initMember("pro1", 20001112, Gender.FEMALE, "computer software engineering",
+        initMember("김교수", 20001112, Gender.FEMALE, "computer software engineering",
                 "010-2623-5432","2623@naver.com", Role.PROFESSOR);
-        initMember("pro2", 20001113, Gender.MALE, "Electronic Engineering",
+        initMember("이교수", 20001113, Gender.MALE, "Electronic Engineering",
                 "010-9876-5432","9876@naver.com", Role.PROFESSOR);
-        initMember("bak", 20001114, Gender.FEMALE, "computer software engineering",
-                "010-1243-5678","1243@naver.com\"", Role.NORMAL);
-        initMember("beak", 20001115, Gender.MALE, "computer software engineering",
-                "010-1235-5678","1235@naver.com\"", Role.NORMAL);
-        initMember("beak", 20001116, Gender.FEMALE, "computer software engineering",
-                "010-1263-5678","1263@naver.com\"", Role.NORMAL);
-        initMember("Master", 2000,Gender.MALE,"Computer Science","123-456-7890", "dummy@example.com",Role.MASTER); // createDummyMember()
-        initMember("Dummy", 2000,Gender.MALE,"Computer Science","123-456-7890", "dummy@example.com",Role.NORMAL); // createDummyMember2()
+        initMember("스팀팩", 20001114, Gender.FEMALE, "computer software engineering",
+                "010-1243-5678","1243@naver.com", Role.NORMAL);
+        initMember("트런들", 20001115, Gender.MALE, "computer software engineering",
+                "010-1235-5678","1235@naver.com", Role.NORMAL);
+        initMember("르블랑", 20001116, Gender.FEMALE, "computer software engineering",
+                "010-1263-5678","1263@naver.com", Role.NORMAL);
+        initMember("이회장", 2000,Gender.MALE,"Computer Science","123-456-7890", "dummy@example.com",Role.MASTER); // createDummyMember()
+        initMember("김더미", 2000,Gender.MALE,"Computer Science","123-456-7890", "dummy@example.com",Role.NORMAL); // createDummyMember2()
         initMember("김운희", 19921212, Gender.FEMALE, "computer software engineering",
-                "010-1212-3232","11231423@naver.com\"", Role.NORMAL);
+                "010-1212-3232","11231423@naver.com", Role.NORMAL);
         initMember("박사장", 19921212, Gender.FEMALE, "computer software engineering",
-                "010-0000-1111","k1k1@naver.com\"", Role.MANAGER);
+                "010-0000-1111","k1k1@naver.com", Role.MANAGER);
+        initMember("홍길동", 19921122,Gender.MALE,"Computer Science","123-456-7890", "dummy1@example.com",Role.NORMAL);
+        initMember("손흥민", 19931202,Gender.MALE,"Computer Science","123-456-7891", "dummy2@example.com",Role.NORMAL);
+        initMember("박지성", 19940719,Gender.MALE,"Computer Science","123-456-7892", "dummy3@example.com",Role.NORMAL);
+        initMember("이상혁", 19950915,Gender.MALE,"Computer Science","123-456-7893", "dummy4@example.com",Role.NORMAL);
+        initMember("김연아", 19961011,Gender.FEMALE,"Computer Science","123-456-7893", "dummy5@example.com",Role.NORMAL);
     }
 
     private void initMember(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email, Role role){
@@ -112,10 +117,10 @@ public class DummyDataLoader implements CommandLineRunner {
     }
 
     private void initClub(){
-        Member lee1 = memberRepository.findFirstByName("lee1");
-        Member kim = memberRepository.findFirstByName("kim");
-        Member pro1 = memberRepository.findFirstByName("pro1");
-        Member pro2 = memberRepository.findFirstByName("pro2");
+        Member lee1 = memberRepository.findFirstByName("이회장");
+        Member kim = memberRepository.findFirstByName("김회장");
+        Member pro1 = memberRepository.findFirstByName("김교수");
+        Member pro2 = memberRepository.findFirstByName("이교수");
         initClub("AClub",ClubType.CENTRAL,lee1, pro1);
         initClub("BClub",ClubType.DEPARTMENT,kim,pro2);
     }
@@ -158,14 +163,25 @@ public class DummyDataLoader implements CommandLineRunner {
     }
 
     private void initClubMember(){
-        Member lee1 = memberRepository.findFirstByName("lee1");
-        Member kim = memberRepository.findFirstByName("kim");
+        Member lee1 = memberRepository.findFirstByName("이회장");
+        Member kim = memberRepository.findFirstByName("김회장");
         Club aclub = clubRepository.findFirstByName("AClub");
         Club bclub = clubRepository.findFirstByName("BClub");
         initClubMember(aclub,lee1, null);
         initClubMember(aclub,kim, Condition.WAITING);
         initClubMember(bclub,lee1, Condition.WAITING);
         initClubMember(bclub,kim, null);
+
+        Member a = memberRepository.findFirstByName("손흥민");
+        initClubMember(aclub,a, Condition.BELONG);
+        Member b = memberRepository.findFirstByName("김연아");
+        initClubMember(aclub,b, Condition.WAITING);
+        Member c = memberRepository.findFirstByName("박지성");
+        initClubMember(aclub,c, Condition.WAITING);
+        Member d = memberRepository.findFirstByName("이상혁");
+        initClubMember(aclub,d, Condition.WAITING);
+        Member e = memberRepository.findFirstByName("김연아");
+        initClubMember(aclub,e, Condition.WAITING);
     }
 
     private void initClubMember(Club club, Member student, Condition condition ){
