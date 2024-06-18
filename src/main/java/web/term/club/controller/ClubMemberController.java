@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubMember;
+import web.term.club.domain.Enum.Role;
 import web.term.club.domain.Member;
 import web.term.club.response.ClubMemberDto;
 import web.term.club.response.waitingClubMemberDto;
@@ -137,6 +138,16 @@ public class ClubMemberController {
             targetMember.setId(memberId);
             ClubMember updatedMember = clubMemberService.banClubMember(requestMember, clubId, targetMember);
             return new ResponseEntity<>(updatedMember, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+   //해당 유저 직급 변경
+    @PostMapping("/changeRank/{targetclubMemberId}")
+    public ResponseEntity<?> changeRankClubMember(@RequestParam Long requesterId, @RequestParam String rank, @PathVariable Long targetclubMemberId) {
+        try {
+            ClubMember changedClubMember = clubMemberService.changeRank(requesterId, rank, targetclubMemberId);
+            return new ResponseEntity<>(changedClubMember, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
