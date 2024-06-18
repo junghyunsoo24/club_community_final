@@ -1,6 +1,8 @@
 package web.term.club.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.term.club.domain.Club;
@@ -12,8 +14,11 @@ import web.term.club.repository.ClubMemberRepository;
 import web.term.club.repository.ClubRepository;
 import web.term.club.repository.MemberRepository;
 import web.term.club.response.ClubMemberDto;
+import web.term.club.response.waitingClubMemberDto;
 import web.term.club.service.ClubMemberService;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,15 +58,24 @@ public class ClubMemberServiceImpl implements ClubMemberService {
     }
 
     @Override
-    public List<ClubMember> getWaitingClubMember(Club club, Member requestMember) throws Exception {
+    public List<waitingClubMemberDto> getWaitingClubMember(Club club, Member requestMember) throws Exception {
         Member masteMember = memberRepository.findById(requestMember.getId()).orElseThrow(() -> new IllegalArgumentException("신청자 권한확인용 회원검출 :getWaitingClubMember"));
         if(masteMember.getRole() != Role.MASTER){
             //System.out.println("함정에 빠졌다.");
             return null;
         }
         List<ClubMember> clubMembers = clubMemberRepository.findByClubAndCondition(club, Condition.WAITING);
-        //System.out.println("clubMembers.get(0) = " + clubMembers.get(0));
-        return clubMembers;
+        List<waitingClubMemberDto> waitingClubMemberDtoList
+                = clubMembers.stream()
+                .map(clubMember -> waitingClubMemberDto.builder()
+                        .id(clubMember.getId())
+                        .name(clubMember.getStudent().getName())
+                        .department(clubMember.getStudent().getDepartment())
+                        .filePath(clubMember.getFilePath())
+                        .build())
+                .collect(Collectors.toList());
+
+        return waitingClubMemberDtoList;
     }
 
     @Override
@@ -120,5 +134,23 @@ public class ClubMemberServiceImpl implements ClubMemberService {
         targetClub.getClubMembers().add(newClubMember);
         clubRepository.save(targetClub);
         return newClubMember;
+    }
+
+    @Override
+    public Resource getApplyClubFile(ClubMember clubMember, Long requestMemberId) throws Exception{
+        Member masterMember = memberRepository.findById(requestMemberId).orElseThrow(() -> new IllegalArgumentException("업무 처리자 확인"));
+        if(masterMember.getRole() != Role.MASTER){
+            //System.out.println("함정에 빠졌다.");
+            return null;
+        }
+        ClubMember targetClubMember = clubMemberRepository.findById(clubMember.getId()).orElseThrow(() -> new IllegalArgumentException("처리 대상자 확인"));
+        String filePath = targetClubMember.getFilePath();
+        Path file = Paths.get(filePath).normalize();
+        Resource resource = new UrlResource(file.toUri());
+        if (resource.exists()) {
+            return resource;
+        } else {
+            throw new RuntimeException("File not found");
+        }
     }
 }
