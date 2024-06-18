@@ -67,4 +67,14 @@ public class ClubInfoServiceImpl implements ClubInfoService {
         clubRepository.save(targetClub);
         return newClubInfo;
     }
+
+    @Override
+    public void saveClubInfo(ClubInfo clubInfo) {
+        clubInfoRepository.save(clubInfo);
+    }
+
+    @Override
+    public Club findFirstByName(String name){
+        return clubRepository.findFirstByName(name);
+    }
 }
