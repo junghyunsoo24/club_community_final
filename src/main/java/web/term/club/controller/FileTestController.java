@@ -43,7 +43,7 @@ public class FileTestController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    @PostMapping
+    @PostMapping("/applyClub")
     // 파일 업로드 -> 가입신청이 될 예정
     public ApiResponse<FilePropertyResponse> uploadFileAndApplyClub(@ModelAttribute web.term.club.controller.ApplyClubForm form) throws IOException {
         MultipartFile attachedFile = form.getAttachedFile();
@@ -51,8 +51,9 @@ public class FileTestController {
         Long id = form.getStudentId();
         Long clubId = form.getClubId();
         String department = form.getDepartment();
-        ClubMember newClubMember =  clubMemberService.applyClub(id, name, clubId);
         FilePropertyResponse filePropertyResponse = filePropertyService.storeFile(attachedFile);
+        ClubMember newClubMember =  clubMemberService.applyClub(id, name, clubId, filePropertyResponse.getFileUrl());
+
         return ApiResponse.response(ResponseCode.Created, filePropertyResponse);
     }
     @DeleteMapping("/{id}")
