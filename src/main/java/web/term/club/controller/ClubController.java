@@ -43,4 +43,14 @@ public class ClubController {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/club/chairman/{memberId}")
+    public ResponseEntity<?> getChairmansClub(@PathVariable Long memberId) throws Exception {
+        try {
+            List<ClubDto> clubs = clubSerivce.myOwnClubs();
+            return new ResponseEntity<>(clubs, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
