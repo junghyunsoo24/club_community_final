@@ -1,9 +1,18 @@
 package web.term.club.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import web.term.club.domain.Enum.Gender;
 
-@Data
+@Getter
+@Setter
 public class MemberDto {
+    private int birthDate;
+    private String email;
+    private Gender gender;
+    private String major;
+    private String name;
+    private String phone;
+    private Long uniqueId;
+
 }

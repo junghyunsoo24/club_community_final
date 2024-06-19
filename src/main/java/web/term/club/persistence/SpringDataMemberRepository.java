@@ -12,4 +12,6 @@ public interface SpringDataMemberRepository extends JpaRepository<Member,Long> {
 
     Member findByNameAndDataOfBirthAndGenderAndDepartmentAndPhoneNumAndEmail(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email);
 
+    Member findByUniqueId(Long uniqueId);
+
 }
