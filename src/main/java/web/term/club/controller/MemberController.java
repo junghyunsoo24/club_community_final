@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.term.club.domain.Enum.Gender;
 import web.term.club.domain.Member;
+import web.term.club.response.MemberDto;
 import web.term.club.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -184,14 +185,24 @@ public class MemberController {
 //    }
 
     @PostMapping("/join")
-    public void joinMember(@RequestParam int birthDate, @RequestParam String email, @RequestParam Gender gender, @RequestParam String major, @RequestParam String name, @RequestParam String phone, @RequestParam String uniqueId) {
-        Member member = memberService.joinMember(name, birthDate, gender, major, phone, email, uniqueId);
+    public ResponseEntity<Map<String, Object>> joinMember(@RequestBody MemberDto memberDto) {
+        Member member = memberService.joinMember(
+                memberDto.getName(),
+                memberDto.getBirthDate(),
+                memberDto.getGender(),
+                memberDto.getMajor(),
+                memberDto.getPhone(),
+                memberDto.getEmail(),
+                memberDto.getUniqueId()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @GetMapping("/login/{uniqueId}")
-    public ResponseEntity<Map<String, Object>> loginMember(@RequestParam String uniqueId, HttpServletResponse response) throws Exception {
+    @PostMapping("/login/{uniqueId}")
+    public ResponseEntity<Map<String, Object>> loginMember(@PathVariable String uniqueId, HttpServletResponse response) throws Exception {
         Member member = memberService.findUniqueId(uniqueId);
         if (member != null) { // 회원이 존재하는 경우
+            System.out.println("haha");
             String redirectUrl = "http://localhost:3000";
             response.sendRedirect(redirectUrl);
             return null;
