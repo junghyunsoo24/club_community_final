@@ -15,14 +15,14 @@ import web.term.club.domain.ClubInfo;
 import web.term.club.domain.Enum.ClubApprovalStatus;
 import web.term.club.repository.ClubInfoRepository;
 import web.term.club.repository.ClubRepository;
-import web.term.club.service.ClubSerivce;
+import web.term.club.service.ClubService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ClubServiceImpl implements ClubSerivce {
+public class ClubServiceImpl implements ClubService {
     @Autowired
     private ClubRepository clubRepository;
 

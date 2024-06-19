@@ -5,4 +5,6 @@ import web.term.club.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findFirstByName(String Name);
+
+    Member findByUniqueId(Long uniqueId);
 }

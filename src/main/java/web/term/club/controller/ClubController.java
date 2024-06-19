@@ -6,19 +6,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.term.club.request.ClubAcceptRequest;
 import web.term.club.response.ClubDto;
-import web.term.club.service.ClubSerivce;
+import web.term.club.service.ClubService;
 
 import java.util.List;
 
 @RestController
 public class ClubController {
     @Autowired
-    private ClubSerivce clubSerivce;
+    private ClubService clubService;
 
     @PostMapping("/club")
     public ResponseEntity<?> createClub(@RequestBody ClubDto clubDto) throws Exception {
         try {
-            ClubDto club = clubSerivce.addClub(clubDto);
+            ClubDto club = clubService.addClub(clubDto);
             return new ResponseEntity<>(club, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -28,7 +28,7 @@ public class ClubController {
     @GetMapping("/clubs")
     public ResponseEntity<?> clubs() throws Exception {
         try {
-            List<ClubDto> clubs = clubSerivce.clubs();
+            List<ClubDto> clubs = clubService.clubs();
             return new ResponseEntity<>(clubs, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -38,7 +38,7 @@ public class ClubController {
     @PutMapping("/club/accept")
     public ResponseEntity<?> acceptClub(@RequestBody ClubAcceptRequest clubAcceptRequest) throws Exception {
         try {
-            ClubDto club = clubSerivce.acceptClub(clubAcceptRequest);
+            ClubDto club = clubService.acceptClub(clubAcceptRequest);
             return new ResponseEntity<>(club, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -48,7 +48,7 @@ public class ClubController {
     @GetMapping("/club/own/{memberId}")
     public ResponseEntity<?> getOwnClubs(@PathVariable Long memberId) throws Exception {
         try {
-            List<ClubDto> clubs = clubSerivce.myOwnClubs(memberId);
+            List<ClubDto> clubs = clubService.myOwnClubs(memberId);
             return new ResponseEntity<>(clubs, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -58,7 +58,7 @@ public class ClubController {
     @GetMapping("/club/chairman/{memberId}")
     public ResponseEntity<?> getChairmansClub(@PathVariable Long memberId) throws Exception {
         try {
-            ClubDto club = clubSerivce.chairmansClub(memberId);
+            ClubDto club = clubService.chairmansClub(memberId);
             return new ResponseEntity<>(club, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -68,7 +68,7 @@ public class ClubController {
     @GetMapping("/clubs/chairman/{memberId}")
     public ResponseEntity<?> getChairmansAllClub(@PathVariable Long memberId) throws Exception {
         try {
-            List<ClubDto> clubs = clubSerivce.chairmansClubs(memberId);
+            List<ClubDto> clubs = clubService.chairmansClubs(memberId);
             return new ResponseEntity<>(clubs, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -78,7 +78,7 @@ public class ClubController {
     @GetMapping("/club/chairman/wait/{memberId}")
     public ResponseEntity<?> getChairmansWaitClub(@PathVariable Long memberId) throws Exception {
         try {
-            ClubDto club = clubSerivce.chairmansWaitClub(memberId);
+            ClubDto club = clubService.chairmansWaitClub(memberId);
             return new ResponseEntity<>(club, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

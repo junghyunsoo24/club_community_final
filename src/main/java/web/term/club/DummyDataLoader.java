@@ -10,6 +10,9 @@ import web.term.club.repository.*;
 
 import java.time.LocalTime;
 import java.util.stream.IntStream;
+
+import static java.lang.Boolean.FALSE;
+
 @Transactional
 @Component
 public class DummyDataLoader implements CommandLineRunner {
@@ -54,11 +57,16 @@ public class DummyDataLoader implements CommandLineRunner {
     }
 
     private void initPost(){
-        Member member = memberRepository.findFirstByName("이회장");
-        Member member2 = memberRepository.findFirstByName("김더미");
+        Long id = 1L;
+        Member member = memberRepository.findById(id).get();
         for (BoardType boardType : BoardType.values()) {
-            IntStream.rangeClosed(1, 6).forEach(i -> {
-                Post post = createDummyPost(member, boardType);
+            IntStream.rangeClosed(1, 12).forEach(i -> {
+                Post post;
+                if (i % 2 == 0) {
+                    post = createDummyPost(member, boardType, "AClub", false);
+                } else {
+                    post = createDummyPost(member, boardType, "BClub", true);
+                }
                 postRepository.save(post);
             });
         }
@@ -105,13 +113,16 @@ public class DummyDataLoader implements CommandLineRunner {
         memberRepository.save(member);
     }
 
-    private Post createDummyPost(Member member, BoardType boardType) {
+    private Post createDummyPost(Member member, BoardType boardType, String clubName, boolean opened) {
         return Post.builder()
                 .member(member)
                 .boardType(boardType)
                 .title("Dummy Post - " + boardType)
                 .content("This is a dummy post for " + boardType)
                 .url("https://example.com")
+                .clubName(clubName)
+                .studentName(member.getName())
+                .open(opened)
                 .build();
     }
 

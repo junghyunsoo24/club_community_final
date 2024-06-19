@@ -23,4 +23,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
     List<ClubMember> findByStudentAndCondition(Member student, Condition condition);
 
     ClubMember findFirstByStudentAndRank(Member student, Rank rank);
+
+    List<ClubMember> findByStudent(Member Student);
 }

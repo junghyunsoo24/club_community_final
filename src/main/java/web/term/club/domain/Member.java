@@ -25,6 +25,8 @@ public class Member {
     private String department;
     private String phoneNum;
     private String email;
+
+    private Long uniqueId;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -44,7 +46,6 @@ public class Member {
         else{
             this.role = role;
         }
-
     }
 
     //마스터 권한 부여
