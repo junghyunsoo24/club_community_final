@@ -189,20 +189,12 @@ public class MemberController {
     }
 
     @GetMapping("/login/{uniqueId}")
-    public ResponseEntity<Map<String, Object>> loginMember(@RequestParam String uniqueId) {
+    public ResponseEntity<Map<String, Object>> loginMember(@RequestParam String uniqueId, HttpServletResponse response) throws Exception {
         Member member = memberService.findUniqueId(uniqueId);
         if (member != null) { // 회원이 존재하는 경우
-            Map<String, Object> response = new HashMap<>();
-            response.put("birthDate", member.getDataOfBirth());
-            response.put("email", member.getEmail());
-            response.put("gender", member.getGender());
-            response.put("major", member.getDepartment());
-            response.put("name", member.getName());
-            response.put("phone", member.getPhoneNum());
-            response.put("studentId", member.getId());
-            response.put("uniqueId", member.getUniqueId());
-            response.put("role", member.getRole());
-            return ResponseEntity.ok(response);
+            String redirectUrl = "http://localhost:3000";
+            response.sendRedirect(redirectUrl);
+            return null;
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 회원 정보가 없을 경우 401 Unauthorized
         }
