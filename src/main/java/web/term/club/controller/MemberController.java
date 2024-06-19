@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.term.club.domain.Enum.Gender;
 import web.term.club.domain.Member;
+import web.term.club.response.MemberDto;
 import web.term.club.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -184,22 +185,36 @@ public class MemberController {
 //    }
 
     @PostMapping("/join")
-    public void joinMember(@RequestParam int birthDate, @RequestParam String email, @RequestParam Gender gender, @RequestParam String major, @RequestParam String name, @RequestParam String phone, @RequestParam String uniqueId) {
-        Member member = memberService.joinMember(name, birthDate, gender, major, phone, email, uniqueId);
+    public void joinMember(@RequestBody MemberDto memberDto) {
+        Member member = memberService.joinMember(
+                memberDto.getName(),
+                memberDto.getBirthDate(),
+                memberDto.getGender(),
+                memberDto.getMajor(),
+                memberDto.getPhone(),
+                memberDto.getEmail(),
+                memberDto.getUniqueId()
+        );
+        System.out.println(member.getUniqueId());
     }
 
-    @GetMapping("/login/{uniqueId}")
-    public ResponseEntity<Map<String, Object>> loginMember(@RequestParam String uniqueId) {
+    @PostMapping("/login/{uniqueId}")
+    public ResponseEntity<Map<String, Object>> loginMember(@PathVariable Long uniqueId) throws Exception {
         Member member = memberService.findUniqueId(uniqueId);
         if (member != null) { // 회원이 존재하는 경우
+            System.out.println(member.getUniqueId());
+            String redirectUrl = "http://localhost:3000";
+            // response.sendRedirect(redirectUrl); // 이 줄은 제거
+
             Map<String, Object> response = new HashMap<>();
-            response.put("birthDate", member.getDataOfBirth());
-            response.put("email", member.getEmail());
-            response.put("gender", member.getGender());
-            response.put("major", member.getDepartment());
+            response.put("redirectUrl", redirectUrl);
+            response.put("id", member.getId());
             response.put("name", member.getName());
-            response.put("phone", member.getPhoneNum());
-            response.put("studentId", member.getId());
+            response.put("dateOfBirth", member.getDataOfBirth());
+            response.put("gender", member.getGender());
+            response.put("department", member.getDepartment());
+            response.put("phoneNum", member.getPhoneNum());
+            response.put("email", member.getEmail());
             response.put("uniqueId", member.getUniqueId());
             response.put("role", member.getRole());
             return ResponseEntity.ok(response);

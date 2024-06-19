@@ -28,7 +28,7 @@ public class Member {
     private String department;
     private String phoneNum;
     private String email;
-    private String uniqueId;
+    private Long uniqueId;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -36,7 +36,7 @@ public class Member {
 
 
     @Builder
-    public Member(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email, String uniqueId, Role role){
+    public Member(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email, Long uniqueId, Role role){
         this.name = name;
         this.dataOfBirth = dataOfBirth;
         this.gender = gender;
