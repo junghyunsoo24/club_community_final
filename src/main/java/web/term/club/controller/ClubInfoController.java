@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubInfo;
+import web.term.club.domain.FilePropertyResponse;
 import web.term.club.response.ClubInfoDto;
 import web.term.club.service.ClubInfoService;
 import web.term.club.service.ClubSerivce;
+import web.term.club.service.FilePropertyService;
 
+import java.io.IOException;
 import java.time.LocalTime;
 
 @RestController
@@ -21,6 +24,9 @@ public class ClubInfoController {
     private ClubInfoService clubInfoService;
     @Autowired
     private ClubSerivce clubSerivce;
+
+    @Autowired
+    private FilePropertyService filePropertyService;
 
     // 클럽 정보 조회
     // 검증 o
@@ -75,9 +81,10 @@ public class ClubInfoController {
         }
     }
 
-    private String saveFile(MultipartFile file) {
+    private String saveFile(MultipartFile file) throws IOException {
         // 파일 저장 로직 구현
-        return "C:\\Users\\sunni\\file-repository";
+        FilePropertyResponse filePropertyResponse = filePropertyService.storeFile(file);
+        return filePropertyResponse.getFileUrl();
     }
 
     @PostMapping("/update/{clubId}")
