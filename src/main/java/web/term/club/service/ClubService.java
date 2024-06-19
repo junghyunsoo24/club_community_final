@@ -6,7 +6,7 @@ import web.term.club.domain.Club;
 
 import java.util.List;
 
-public interface ClubSerivce {
+public interface ClubService {
     ClubDto addClub(ClubDto clubDto) throws Exception;
 
     ClubDto acceptClub(ClubAcceptRequest clubAcceptRequest) throws Exception;

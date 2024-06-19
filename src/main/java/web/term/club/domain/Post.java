@@ -27,11 +27,23 @@ public class Post {
     @JoinColumn(name = "student_id")
     private Member member;
 
+
+    //    private FileProperty fileProperty;
+    private String fileUrl;
+
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
     private String title;
     private String content;
     private String url;
-    private boolean open; // 동아리 공지 전체 공개 여부
+    private String clubName;
+    private String studentName;
+    @Builder.Default
+    private boolean open = false; // 동아리 공지 전체 공개 여부
+
+
+//    @Lob
+//    @Column(name = "image", columnDefinition = "BLOB")
+//    private byte[] image;  // 이미지 데이터를 저장하는 필드
 }
