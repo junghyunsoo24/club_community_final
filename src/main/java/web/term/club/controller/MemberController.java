@@ -207,6 +207,4 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 회원 정보가 없을 경우 401 Unauthorized
         }
     }
-
-
 }
