@@ -103,4 +103,9 @@ public class ClubInfoServiceImpl implements ClubInfoService {
 
         return ClubInfoDto.of(clubInfoEntity);
     }
+
+    @Override
+    public Club findById(Long clubId) {
+        return clubRepository.findById(clubId).orElseThrow(() -> new IllegalArgumentException("동아리를 찾을 수 없습니다."));
+    }
 }

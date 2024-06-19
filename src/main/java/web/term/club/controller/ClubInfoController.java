@@ -55,13 +55,18 @@ public class ClubInfoController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createClubInfo(@RequestPart("clubName") String clubName,
+    public ResponseEntity<?> createClubInfo(@PathVariable Long clubId,
+                                            @RequestPart("clubName") String clubName,
                                             @RequestPart("clubInfo") String clubInfo,
                                             @RequestPart("clubMeetTime") String clubMeetTime,
                                             @RequestPart(value = "clubImg", required = false) MultipartFile clubImg,
                                             @RequestPart(value = "applicationFile", required = false) MultipartFile applicationFile) {
         try {
-            Club club = clubInfoService.findFirstByName(clubName);
+            Club club = clubInfoService.findById(clubId);
+            System.out.println("clubId = " + clubId);
+            System.out.println("club.getId() = " + club.getId());
+            club.setName(clubName);
+            System.out.println("new club Name = " + club.getName());
             ClubInfo newClubInfo = new ClubInfo();
             newClubInfo.setInfo(clubInfo);
             newClubInfo.setMeetingTime(LocalTime.parse(clubMeetTime.replaceAll("\"", ""))); // 따옴표 제거
