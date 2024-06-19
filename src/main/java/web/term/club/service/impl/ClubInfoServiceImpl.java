@@ -32,11 +32,10 @@ public class ClubInfoServiceImpl implements ClubInfoService {
     private ClubMemberRepository clubMemberRepository;
     @Override
     public ClubInfoDto getClubInfo(Club club) throws Exception {
-        ClubInfo clubInfo = clubInfoRepository.findById(club.getId()).orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :getClubInfo"));
+        Club targetClub = clubRepository.findById(club.getId()).orElseThrow(() -> new IllegalArgumentException("동아리 조회 실패 :getClubInfo"));
+        ClubInfo clubInfo = clubInfoRepository.findById(targetClub.getClubInfo().getId()).orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :getClubInfo"));
         ClubInfoDto clubInfoDto = ClubInfoDto.of(clubInfo);
-        clubInfoDto.setClubMembers(clubRepository.findById(club.getId())
-                .orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :getClubInfo2"))
-                .getClubMembers());
+        clubInfoDto.setClubMembers(targetClub.getClubMembers());
         return clubInfoDto;
     }
 
@@ -103,14 +102,5 @@ public class ClubInfoServiceImpl implements ClubInfoService {
         clubRepository.save(club);
 
         return ClubInfoDto.of(clubInfoEntity);
-    }
-
-    private String saveFile(MultipartFile file) throws IOException {
-        // 파일 저장 로직 구현
-        // 예시: 파일을 특정 디렉터리에 저장하고 경로를 반환
-        String filePath = "C:\\Users\\sunni\\file-repository";
-        File dest = new File(filePath);
-        file.transferTo(dest);
-        return filePath;
     }
 }
