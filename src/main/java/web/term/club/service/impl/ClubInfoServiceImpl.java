@@ -3,6 +3,7 @@ package web.term.club.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import web.term.club.domain.Club;
 import web.term.club.domain.ClubInfo;
 import web.term.club.domain.ClubMember;
@@ -12,6 +13,9 @@ import web.term.club.repository.ClubRepository;
 import web.term.club.response.ClubInfoDto;
 import web.term.club.service.ClubInfoService;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,11 +32,10 @@ public class ClubInfoServiceImpl implements ClubInfoService {
     private ClubMemberRepository clubMemberRepository;
     @Override
     public ClubInfoDto getClubInfo(Club club) throws Exception {
-        ClubInfo clubInfo = clubInfoRepository.findById(club.getId()).orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :getClubInfo"));
+        Club targetClub = clubRepository.findById(club.getId()).orElseThrow(() -> new IllegalArgumentException("동아리 조회 실패 :getClubInfo"));
+        ClubInfo clubInfo = clubInfoRepository.findById(targetClub.getClubInfo().getId()).orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :getClubInfo"));
         ClubInfoDto clubInfoDto = ClubInfoDto.of(clubInfo);
-        clubInfoDto.setClubMembers(clubRepository.findById(club.getId())
-                .orElseThrow(() -> new IllegalArgumentException("동아리 정보 조회 실패 :getClubInfo2"))
-                .getClubMembers());
+        clubInfoDto.setClubMembers(targetClub.getClubMembers());
         return clubInfoDto;
     }
 
@@ -75,6 +78,34 @@ public class ClubInfoServiceImpl implements ClubInfoService {
 
     @Override
     public Club findFirstByName(String name){
+        System.out.println("haha"+name);
         return clubRepository.findFirstByName(name);
+    }
+
+    @Override
+    public ClubInfoDto updateClubInfo(Long clubId, String clubName, String clubInfo) throws Exception {
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(() -> new IllegalArgumentException("동아리를 찾을 수 없습니다."));
+
+        // 클럽 이름 업데이트
+        club.setName(clubName);
+
+        // ClubInfo 업데이트
+        ClubInfo clubInfoEntity = club.getClubInfo();
+        if (clubInfoEntity == null) {
+            clubInfoEntity = new ClubInfo();
+            club.setClubInfo(clubInfoEntity);
+        }
+        clubInfoEntity.setInfo(clubInfo);
+
+        clubInfoRepository.save(clubInfoEntity);
+        clubRepository.save(club);
+
+        return ClubInfoDto.of(clubInfoEntity);
+    }
+
+    @Override
+    public Club findById(Long clubId) {
+        return clubRepository.findById(clubId).orElseThrow(() -> new IllegalArgumentException("동아리를 찾을 수 없습니다."));
     }
 }

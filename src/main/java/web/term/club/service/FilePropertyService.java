@@ -74,6 +74,7 @@ public class FilePropertyService {
         Path file = Paths.get(basePath + filename).normalize();
         Resource resource = new UrlResource(file.toUri());
         if (resource.exists()) {
+            System.out.println("resource.getFilename() = " + resource.getFilename());
             return resource;
         } else {
             throw new RuntimeException("File not found");
