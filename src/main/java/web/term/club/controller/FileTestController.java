@@ -72,6 +72,7 @@ public class FileTestController {
         try {
             System.out.println("clubId = " + clubId);
             Resource file = filePropertyService.loadClubSignUpFile(clubId);
+            System.out.println("전송할 파일 = " + file.getFilename());
             return ResponseEntity.ok().body(file);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
