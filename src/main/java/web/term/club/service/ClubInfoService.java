@@ -11,4 +11,6 @@ public interface ClubInfoService {
     void saveClubInfo(ClubInfo clubInfo);
     Club findFirstByName(String name);
     ClubInfoDto updateClubInfo(Long clubId, String clubName, String clubInfo) throws Exception;
+
+    Club findById(Long clubId);
 }
