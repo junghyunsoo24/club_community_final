@@ -23,4 +23,6 @@ public interface ClubMemberService {
     ClubMember applyClub(Long id, String name, Long clubId, String filePath);
 
     Resource getApplyClubFile(ClubMember clubMember, Long requestMemberId) throws Exception;
+
+    ClubMember changeRank(Long requesterId, String role, Long targetMemberId) throws Exception;
 }

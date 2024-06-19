@@ -22,4 +22,6 @@ public interface ClubSerivce {
     ClubDto chairmansWaitClub(Long memberId) throws Exception;
 
     List<ClubDto> chairmansClubs(Long memberId) throws Exception;
+
+    Club saveClub(Club club);
 }

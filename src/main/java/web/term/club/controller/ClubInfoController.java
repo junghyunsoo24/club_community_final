@@ -10,6 +10,7 @@ import web.term.club.domain.Club;
 import web.term.club.domain.ClubInfo;
 import web.term.club.response.ClubInfoDto;
 import web.term.club.service.ClubInfoService;
+import web.term.club.service.ClubSerivce;
 
 import java.time.LocalTime;
 
@@ -18,6 +19,8 @@ import java.time.LocalTime;
 public class ClubInfoController {
     @Autowired
     private ClubInfoService clubInfoService;
+    @Autowired
+    private ClubSerivce clubSerivce;
 
     // 클럽 정보 조회
     // 검증 o
@@ -64,6 +67,8 @@ public class ClubInfoController {
             }
             newClubInfo.setClub(club);
             clubInfoService.saveClubInfo(newClubInfo);
+            club.setClubInfo(newClubInfo);
+            clubSerivce.saveClub(club);
             return new ResponseEntity<>("Club info created successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -73,5 +78,19 @@ public class ClubInfoController {
     private String saveFile(MultipartFile file) {
         // 파일 저장 로직 구현
         return "C:\\Users\\sunni\\file-repository";
+    }
+
+    @PostMapping("/update/{clubId}")
+    public ResponseEntity<?> updateClubInfo(@PathVariable Long clubId, @RequestPart("clubName") String clubName,
+                                            @RequestPart("clubInfo") String clubInfo,
+                                            @RequestPart("clubMeetTime") String clubMeetTime,
+                                            @RequestPart(value = "clubImg", required = false) MultipartFile clubImg,
+                                            @RequestPart(value = "applicationFile", required = false) MultipartFile applicationFile) {
+        try {
+            ClubInfoDto updatedClubInfo = clubInfoService.updateClubInfo(clubId, clubName, clubInfo);
+            return new ResponseEntity<>(updatedClubInfo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

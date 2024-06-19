@@ -43,4 +43,6 @@ public class ClubInfo {
         this.meetingTime = meetingTime;
         this.clubSignUpFile = club.getName() + ".txt";
     }
+
+
 }
