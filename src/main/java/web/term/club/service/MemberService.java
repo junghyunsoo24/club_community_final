@@ -29,7 +29,7 @@ public class MemberService {
     private SpringDataMemberRepository memberRepository;
 
     public Member joinMember(String name, int dataOfBirth, Gender gender, String department,
-                             String phoneNum, String email) {
+                             String phoneNum, String email, String uniqueId) {
         Member member = Member.builder()
                 .name(name)
                 .dataOfBirth(dataOfBirth)
@@ -37,6 +37,7 @@ public class MemberService {
                 .department(department)
                 .phoneNum(phoneNum)
                 .email(email)
+                .uniqueId(uniqueId)
                 .role(Role.NORMAL)
                 .build();
         return memberRepository.save(member);
@@ -46,7 +47,7 @@ public class MemberService {
         return memberRepository.findById(id).orElse(null);
     }
 
-    public Member loginMember(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email) {
+    public Member loginMember(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email, String uniqueId) {
         // DB에서 회원 조회 (이름, 생년월일, 성별, 학과, 전화번호, 이메일 모두 일치하는 회원)
         Member member = memberRepository.findByNameAndDataOfBirthAndGenderAndDepartmentAndPhoneNumAndEmail(name, dataOfBirth, gender, department, phoneNum, email);
 
@@ -229,6 +230,12 @@ public class MemberService {
         list.add(nickname);
 
         session.setAttribute("name", nickname);
+    }
+
+    public Member findUniqueId(String uniqueId) {
+
+        return memberRepository.findByUniqueId(uniqueId);
+
     }
 
 }
