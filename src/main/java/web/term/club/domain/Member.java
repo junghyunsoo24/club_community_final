@@ -18,26 +18,33 @@ public class Member {
     @GeneratedValue
     @Column(name = "student_id")
     private Long id;
+
     private String name;
     private int dataOfBirth;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private String department;
     private String phoneNum;
     private String email;
+    private String uniqueId;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
 
 
     @Builder
-    public Member(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email, Role role){
+    public Member(String name, int dataOfBirth, Gender gender, String department, String phoneNum, String email, String uniqueId, Role role){
         this.name = name;
         this.dataOfBirth = dataOfBirth;
         this.gender = gender;
         this.department = department;
         this.phoneNum = phoneNum;
         this.email = email;
+        this.uniqueId = uniqueId;
+
         if(role == null){
             this.role = Role.NORMAL;
         }
