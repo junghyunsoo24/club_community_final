@@ -185,7 +185,7 @@ public class MemberController {
 //    }
 
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> joinMember(@RequestBody MemberDto memberDto) {
+    public void joinMember(@RequestBody MemberDto memberDto) {
         Member member = memberService.joinMember(
                 memberDto.getName(),
                 memberDto.getBirthDate(),
@@ -195,17 +195,29 @@ public class MemberController {
                 memberDto.getEmail(),
                 memberDto.getUniqueId()
         );
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        System.out.println(member.getUniqueId());
     }
 
     @PostMapping("/login/{uniqueId}")
-    public ResponseEntity<Map<String, Object>> loginMember(@PathVariable String uniqueId, HttpServletResponse response) throws Exception {
+    public ResponseEntity<Map<String, Object>> loginMember(@PathVariable Long uniqueId) throws Exception {
         Member member = memberService.findUniqueId(uniqueId);
         if (member != null) { // 회원이 존재하는 경우
-            System.out.println("haha");
+            System.out.println(member.getUniqueId());
             String redirectUrl = "http://localhost:3000";
-            response.sendRedirect(redirectUrl);
-            return null;
+            // response.sendRedirect(redirectUrl); // 이 줄은 제거
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("redirectUrl", redirectUrl);
+            response.put("id", member.getId());
+            response.put("name", member.getName());
+            response.put("dateOfBirth", member.getDataOfBirth());
+            response.put("gender", member.getGender());
+            response.put("department", member.getDepartment());
+            response.put("phoneNum", member.getPhoneNum());
+            response.put("email", member.getEmail());
+            response.put("uniqueId", member.getUniqueId());
+            response.put("role", member.getRole());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 회원 정보가 없을 경우 401 Unauthorized
         }

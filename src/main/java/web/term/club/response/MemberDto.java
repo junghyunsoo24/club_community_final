@@ -13,6 +13,6 @@ public class MemberDto {
     private String major;
     private String name;
     private String phone;
-    private String uniqueId;
+    private Long uniqueId;
 
 }
