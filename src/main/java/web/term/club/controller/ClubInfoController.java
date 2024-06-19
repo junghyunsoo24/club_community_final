@@ -54,7 +54,7 @@ public class ClubInfoController {
         }
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/{clubId}")
     public ResponseEntity<?> createClubInfo(@PathVariable Long clubId,
                                             @RequestPart("clubName") String clubName,
                                             @RequestPart("clubInfo") String clubInfo,
